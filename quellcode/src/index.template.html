@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de" data-theme="clean">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2F5BEA">
+<meta name="description" content="Merkwerk – deine Karteikarten-App mit Spaced Repetition, offline auf Handy und PC.">
+<title>Merkwerk</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='10' width='56' height='44' rx='7' fill='%23fff' stroke='%231C2740' stroke-width='4'/%3E%3Cpath d='M4 22h56' stroke='%23E2464F' stroke-width='4'/%3E%3Cpath d='M14 34h36M14 44h24' stroke='%232F5BEA' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>
+  /* PWA-Dateien nur einbinden, wenn die App über http(s) läuft (nicht bei der Offline-Einzeldatei). */
+  if (location.protocol === 'http:' || location.protocol === 'https:') {
+    [['manifest', 'manifest.webmanifest'], ['apple-touch-icon', 'icons/icon-192.png']].forEach(function (l) {
+      var el = document.createElement('link'); el.rel = l[0]; el.href = l[1]; document.head.appendChild(el);
+    });
+  }
+  try { var t = localStorage.getItem('merkwerk-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+<style>/*__KATEX_CSS__*/</style>
+<style>/*__APP_CSS__*/</style>
+</head>
+<body>
+<div id="app" aria-live="polite"></div>
+<noscript>Merkwerk braucht JavaScript. Bitte aktiviere es in deinem Browser.</noscript>
+<script>/*__KATEX_JS__*/</script>
+<script>/*__APP_JS__*/</script>
+</body>
+</html>

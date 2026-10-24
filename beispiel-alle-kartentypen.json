@@ -1,0 +1,90 @@
+{
+  "format": "merkwerk",
+  "version": 1,
+  "kind": "deck",
+  "folders": [
+    { "path": "Import-Beispiel", "emoji": "📘" },
+    { "path": "Import-Beispiel/Vokabeln", "emoji": "🇬🇧", "lang": "en-GB" },
+    { "path": "Import-Beispiel/Prüfung", "emoji": "⚖️", "examDate": "2027-01-31" }
+  ],
+  "cards": [
+    {
+      "type": "basic",
+      "folder": "Import-Beispiel",
+      "front": "Was besagt das **Pareto-Prinzip**?",
+      "back": "80 % der Ergebnisse entstehen mit 20 % des Aufwands.",
+      "hint": "Eine Prozentregel",
+      "note": "Eselsbrücke: *Wenig tun, viel erreichen.*"
+    },
+    {
+      "type": "basic",
+      "folder": "Import-Beispiel/Vokabeln",
+      "front": "die Nachhaltigkeit",
+      "back": "sustainability",
+      "reverse": true
+    },
+    {
+      "type": "typing",
+      "folder": "Import-Beispiel/Vokabeln",
+      "question": "Übersetze: **zuverlässig**",
+      "answer": "reliable",
+      "alternatives": ["dependable"]
+    },
+    {
+      "type": "mc",
+      "folder": "Import-Beispiel",
+      "question": "Welche Formel beschreibt die Fläche eines Kreises?",
+      "options": ["$\\pi r^2$", "$2 \\pi r$", "$\\pi d$", "$r^2$"],
+      "correct": ["$\\pi r^2$"],
+      "explanation": "$2 \\pi r$ ist der Umfang."
+    },
+    {
+      "type": "mc",
+      "folder": "Import-Beispiel",
+      "question": "Welche dieser Länder liegen in der EU? (mehrere richtig)",
+      "options": ["Österreich", "Schweiz", "Slowenien", "Norwegen"],
+      "correct": [0, 2]
+    },
+    {
+      "type": "match",
+      "folder": "Import-Beispiel",
+      "prompt": "Ordne die Begriffe ihrer Bedeutung zu.",
+      "pairs": [
+        { "left": "Angebot", "right": "Menge, die Verkäufer anbieten" },
+        { "left": "Nachfrage", "right": "Menge, die Käufer kaufen wollen" },
+        { "left": "Gleichgewichtspreis", "right": "Preis, bei dem Angebot = Nachfrage" },
+        { "left": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iODAiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMTAgNzAgTDExMCAxMCIgc3Ryb2tlPSIjMkY1QkVBIiBzdHJva2Utd2lkdGg9IjYiLz48L3N2Zz4=", "right": "steigende Kurve (Bild)" }
+      ]
+    },
+    {
+      "type": "cloze",
+      "folder": "Import-Beispiel",
+      "text": "Die Hauptstadt von Tirol ist {{Innsbruck}}, die von Salzburg ist {{Salzburg|Salzburg-Stadt}}.",
+      "note": "Mehrere richtige Antworten trennst du mit |"
+    },
+    {
+      "type": "truefalse",
+      "folder": "Import-Beispiel/Prüfung",
+      "statement": "Ein Vertrag kann auch mündlich gültig sein.",
+      "answer": true,
+      "explanation": "Grundsätzlich herrscht Formfreiheit – Ausnahmen regelt das Gesetz."
+    },
+    {
+      "type": "order",
+      "folder": "Import-Beispiel/Prüfung",
+      "prompt": "Bringe die Schritte eines Gesetzgebungsverfahrens in Reihenfolge.",
+      "items": ["Gesetzesvorschlag", "Beschluss im Nationalrat", "Befassung des Bundesrats", "Beurkundung durch den Bundespräsidenten", "Kundmachung"]
+    },
+    {
+      "type": "occlusion",
+      "folder": "Import-Beispiel",
+      "prompt": "Welche Farbe hat das markierte Feld?",
+      "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI0Q2NDA0QSIvPjxyZWN0IHg9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMxNzlDNkIiLz48cmVjdCB4PSIyMDAiIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMkY1QkVBIi8+PC9zdmc+",
+      "masks": [
+        { "x": 0.0, "y": 0.0, "w": 0.333, "h": 1.0, "label": "Rot" },
+        { "x": 0.333, "y": 0.0, "w": 0.333, "h": 1.0, "label": "Grün" },
+        { "x": 0.666, "y": 0.0, "w": 0.334, "h": 1.0, "label": "Blau" }
+      ]
+    }
+  ]
+}
