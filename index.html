@@ -51,28 +51,28 @@
   color-scheme: light;
 }
 :root[data-theme="gaming"] {
-  --font-display: Bahnschrift, "DIN Alternate", "Roboto Condensed", "Segoe UI", system-ui, sans-serif;
-  --bg: #120E2E;
-  --bg-2: #1A1442;
-  --surface: #1E1849;
-  --surface-2: #261F5A;
-  --ink: #EEEBFF;
-  --ink-2: #ABA5DA;
-  --ink-3: #7C76B0;
-  --line: #3A3180;
-  --rule: rgba(61, 245, 255, .10);
-  --red-line: #FF4FD8;
-  --accent: #3DF5FF;
-  --accent-ink: #0E0A28;
-  --accent-soft: rgba(61, 245, 255, .14);
-  --good: #3DFFA5; --good-soft: rgba(61, 255, 165, .14);
-  --hard: #FFC23D; --hard-soft: rgba(255, 194, 61, .14);
-  --again: #FF4F72; --again-soft: rgba(255, 79, 114, .15);
-  --easy: #B78CFF; --easy-soft: rgba(183, 140, 255, .16);
-  --shadow: 0 0 0 1px rgba(61, 245, 255, .06), 0 10px 24px -12px rgba(0, 0, 0, .7);
-  --shadow-lift: 0 0 0 1px rgba(61, 245, 255, .18), 0 0 26px -6px rgba(61, 245, 255, .35);
-  --card-shadow: 0 0 0 1px rgba(61, 245, 255, .22), 0 0 34px -10px rgba(255, 79, 216, .45), 0 20px 40px -20px rgba(0, 0, 0, .8);
-  --glow: 0 0 18px rgba(61, 245, 255, .45);
+  /* Gaming: dunkel, ruhig, eine gedämpfte violette Akzentfarbe */
+  --bg: #0D0A14;
+  --bg-2: #14101D;
+  --surface: #17121F;
+  --surface-2: #211B2D;
+  --ink: #ECE8F3;
+  --ink-2: #B3ABC6;
+  --ink-3: #958CAB;
+  --line: #2D263A;
+  --rule: rgba(165, 146, 238, .07);
+  --red-line: #6F5CB8;
+  --accent: #A592EE;
+  --accent-ink: #120E1C;
+  --accent-soft: rgba(165, 146, 238, .14);
+  --good: #6CC59A; --good-soft: rgba(108, 197, 154, .13);
+  --hard: #D9A95E; --hard-soft: rgba(217, 169, 94, .13);
+  --again: #E5838F; --again-soft: rgba(229, 131, 143, .13);
+  --easy: #8FB2EE; --easy-soft: rgba(143, 178, 238, .13);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 20px -12px rgba(0, 0, 0, .7);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, .45), 0 16px 36px -16px rgba(0, 0, 0, .85);
+  --card-shadow: 0 0 0 1px #2D263A, 0 18px 36px -20px rgba(0, 0, 0, .9);
+  --glow: none;
   color-scheme: dark;
 }
 
@@ -82,13 +82,6 @@ html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
 body {
   margin: 0; font-family: var(--font); font-size: 16px; line-height: 1.5; color: var(--ink); background: var(--bg);
   -webkit-font-smoothing: antialiased; min-height: 100vh; min-height: 100dvh; overflow-x: hidden;
-}
-:root[data-theme="gaming"] body {
-  background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(255, 79, 216, .13), transparent 60%),
-    radial-gradient(900px 500px at -10% 110%, rgba(61, 245, 255, .10), transparent 60%),
-    var(--bg);
-  background-attachment: fixed;
 }
 h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; margin: 0; letter-spacing: -.015em; }
 h1 { font-size: clamp(1.7rem, 2.6vw + 1rem, 2.4rem); font-weight: 750; }
@@ -162,7 +155,6 @@ select.input { appearance: none; background-image: linear-gradient(45deg, transp
   position: fixed; inset: 0 auto 0 0; width: var(--nav-w); padding: 22px 14px; display: flex; flex-direction: column; gap: 22px;
   background: var(--surface); border-right: 1px solid var(--line); z-index: 20;
 }
-:root[data-theme="gaming"] .nav { background: rgba(22, 17, 58, .82); backdrop-filter: blur(12px); }
 .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; text-decoration: none; color: var(--ink); }
 .brand-name { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; letter-spacing: -.02em; }
 .brand-mark { position: relative; width: 34px; height: 28px; display: inline-block; flex: none; }
@@ -170,7 +162,6 @@ select.input { appearance: none; background-image: linear-gradient(45deg, transp
 .brand-mark i:nth-child(1) { transform: rotate(-9deg) translate(-2px, 1px); opacity: .45; }
 .brand-mark i:nth-child(2) { transform: rotate(5deg) translate(2px, -1px); opacity: .7; }
 .brand-mark i:nth-child(3) { background: linear-gradient(var(--surface) 0 7px, var(--red-line) 7px 9px, var(--surface) 9px 14px, var(--rule) 14px 15px, var(--surface) 15px 20px, var(--rule) 20px 21px, var(--surface) 21px); }
-:root[data-theme="gaming"] .brand-mark i { border-color: var(--accent); box-shadow: 0 0 10px rgba(61, 245, 255, .35); }
 .brand-mark.big { width: 64px; height: 52px; }
 .nav-links { display: grid; gap: 4px; }
 .nav-link {
@@ -180,7 +171,6 @@ select.input { appearance: none; background-image: linear-gradient(45deg, transp
 .nav-link .icon { width: 22px; height: 22px; }
 .nav-link:hover { background: var(--surface-2); color: var(--ink); }
 .nav-link.is-active { background: var(--accent-soft); color: var(--accent); }
-:root[data-theme="gaming"] .nav-link.is-active { box-shadow: inset 3px 0 0 var(--accent); text-shadow: 0 0 12px rgba(61, 245, 255, .6); }
 .nav-foot { margin-top: auto; display: grid; gap: 10px; }
 .nav-level { display: flex; gap: 10px; align-items: center; padding: 10px; border-radius: 12px; background: var(--surface-2); }
 .nl-badge { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-weight: 800; font-family: var(--font-display); font-variant-numeric: tabular-nums; }
@@ -200,7 +190,6 @@ select.input { appearance: none; background-image: linear-gradient(45deg, transp
   .nav-links { grid-auto-flow: column; grid-auto-columns: 1fr; width: 100%; gap: 0; }
   .nav-link { flex-direction: column; gap: 3px; padding: 9px 2px 7px; font-size: .68rem; justify-content: center; border-radius: 12px; }
   .nav-link.is-active { background: transparent; }
-  :root[data-theme="gaming"] .nav-link.is-active { box-shadow: inset 0 3px 0 var(--accent); }
   .main { margin-left: 0; padding: 20px 16px calc(96px + env(safe-area-inset-bottom)); }
 }
 body.is-studying .nav { display: none; }
@@ -235,7 +224,6 @@ body.is-studying .main { margin-left: 0; padding: 0; max-width: none; }
   background-repeat: no-repeat, repeat;
   background-attachment: local, local;
 }
-:root[data-theme="gaming"] .index-card { --card-bg: #1E1849; }
 
 /* ============ Hinweise, Menüs, Dialoge ============ */
 .toasts { position: fixed; z-index: 100; left: 50%; transform: translateX(-50%); bottom: 24px; display: grid; gap: 8px; width: min(440px, calc(100vw - 24px)); pointer-events: none; }
@@ -247,7 +235,6 @@ body.is-studying .toast-action { pointer-events: auto; }
   pointer-events: auto; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--ink); color: var(--surface);
   box-shadow: var(--shadow-lift); font-size: .93rem; animation: toast-in .25s var(--ease);
 }
-:root[data-theme="gaming"] .toast { background: #2A2270; color: var(--ink); border: 1px solid var(--line); }
 .toast .icon { width: 20px; height: 20px; }
 .toast-ok .icon { color: #5BE0A8; } .toast-warn .icon, .toast-bad .icon { color: #FFB35C; } .toast-fire .icon { color: #FF8A3D; }
 .toast-xp .icon, .toast-badge .icon { color: #FFD24D; } .toast-snow .icon { color: #8FD3FF; }
@@ -262,7 +249,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .menu-item.is-danger, .menu-item.is-danger .icon { color: var(--again); }
 @keyframes pop { from { opacity: 0; transform: scale(.97) translateY(-4px); } }
 .overlay { position: fixed; inset: 0; z-index: 60; background: rgba(15, 21, 38, .48); display: grid; place-items: center; padding: 20px; animation: fade .16s; overflow-y: auto; }
-:root[data-theme="gaming"] .overlay { background: rgba(6, 4, 20, .72); backdrop-filter: blur(3px); }
 .overlay.is-closing { opacity: 0; transition: opacity .16s; }
 @keyframes fade { from { opacity: 0; } }
 .modal {
@@ -309,13 +295,15 @@ body.is-studying .toast-action { pointer-events: auto; }
 .confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 120; }
 .float-text { position: fixed; z-index: 110; transform: translateX(-50%); font-weight: 800; pointer-events: none; animation: float-up 1.1s var(--ease) forwards; font-family: var(--font-display); }
 .float-xp { color: var(--easy); }
-:root[data-theme="gaming"] .float-xp { color: var(--hard); text-shadow: 0 0 10px rgba(255, 194, 61, .7); }
 .float-dmg { color: var(--again); font-size: 1.3rem; }
 @keyframes float-up { from { opacity: 0; transform: translate(-50%, 6px); } 20% { opacity: 1; } to { opacity: 0; transform: translate(-50%, -42px); } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Hinweise nicht über Dialog-Knöpfe legen */
+body:has(.overlay:not(.is-closing)) .toasts { bottom: auto; top: 16px; }
 
 /* ============ Heute ============ */
 .home-head { align-items: center; }
@@ -327,7 +315,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .streak-chip span { color: var(--ink-2); font-size: .9rem; }
 .freeze { display: inline-flex; align-items: center; gap: 2px; margin-left: 4px; padding: 2px 7px; border-radius: 99px; background: #E3F3FF; color: #2B88C8 !important; font-weight: 700; font-size: .8rem !important; }
 .freeze .icon { width: 14px; height: 14px; color: #2B88C8 !important; }
-:root[data-theme="gaming"] .freeze { background: rgba(143, 211, 255, .15); }
 .level-num { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: 1.1rem; font-family: var(--font-display); }
 .level-meta { display: grid; gap: 3px; min-width: 130px; }
 .level-title { font-weight: 700; font-size: .9rem; }
@@ -335,17 +322,14 @@ body.is-studying .toast-action { pointer-events: auto; }
 .xpbar { display: block; height: 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
 .xpbar.big { height: 12px; margin: 10px 0 6px; }
 .xpbar-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--easy)); transition: width .6s var(--ease); }
-:root[data-theme="gaming"] .xpbar-fill { background: linear-gradient(90deg, var(--accent), var(--red-line)); box-shadow: 0 0 10px rgba(61, 245, 255, .6); }
 
 .hero { display: grid; grid-template-columns: minmax(260px, 420px) 1fr; gap: clamp(24px, 4vw, 56px); align-items: center; }
 .hero-stack { position: relative; padding: 16px 18px 26px 12px; }
 .stack-sheet { position: absolute; inset: 16px 18px 26px 12px; border-radius: var(--radius-l); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
 .stack-sheet.s3 { transform: rotate(-5deg) translate(-6px, 10px); opacity: .7; }
 .stack-sheet.s2 { transform: rotate(3deg) translate(8px, 6px); opacity: .9; }
-:root[data-theme="gaming"] .stack-sheet { background: var(--surface-2); border-color: var(--line); }
 .hero-card { position: relative; padding: 62px 28px 26px; min-height: 250px; display: grid; align-content: start; }
 .hero-count { font-family: var(--font-display); font-size: clamp(4.4rem, 9vw, 6.4rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: var(--accent); }
-:root[data-theme="gaming"] .hero-count { text-shadow: 0 0 24px rgba(61, 245, 255, .55); }
 .hero-label { font-weight: 650; font-size: 1.1rem; margin-top: 6px; }
 .hero-split { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
 .pill { font-size: .8rem; font-weight: 650; padding: 4px 10px; border-radius: 99px; background: var(--surface-2); color: var(--ink-2); }
@@ -363,7 +347,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .goal-ring-num span { font-size: .75rem; color: var(--ink-2); }
 .ring-bg { stroke: var(--surface-2); }
 .ring-fg { stroke: var(--good); transition: stroke-dashoffset .8s var(--ease); }
-:root[data-theme="gaming"] .ring-fg { filter: drop-shadow(0 0 5px rgba(61, 255, 165, .7)); }
 @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } .hero-side { justify-items: stretch; } .hero-side .btn-xl { width: 100%; } .goal-box { margin-top: 0; } }
 
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
@@ -377,7 +360,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .tile-icon .icon { width: 24px; height: 24px; }
 .tile-meta { font-size: .82rem; font-weight: 650; color: var(--tile-c); margin-top: 4px; }
 .tile-time { --tile-c: var(--hard); } .tile-boss { --tile-c: var(--again); } .tile-cram { --tile-c: var(--good); }
-:root[data-theme="gaming"] .tile:hover { box-shadow: 0 0 0 1px var(--tile-c), 0 0 28px -6px var(--tile-c); }
 
 .exam-list { display: grid; gap: 10px; }
 .exam-row { display: flex; gap: 16px; align-items: center; text-align: left; padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); cursor: pointer; color: var(--ink); }
@@ -538,7 +520,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .level-big { display: grid; justify-items: center; width: 110px; height: 110px; place-content: center; border-radius: 26px; background: var(--accent); color: var(--accent-ink); flex: none; }
 .level-big strong { font-size: 3rem; font-family: var(--font-display); line-height: 1; }
 .level-big .muted { color: inherit; opacity: .8; font-size: .85rem; }
-:root[data-theme="gaming"] .level-big { box-shadow: 0 0 30px rgba(61, 245, 255, .5); }
 .level-panel-main { flex: 1; display: grid; gap: 4px; }
 @media (max-width: 600px) { .level-panel { flex-direction: column; align-items: stretch; } .level-big { width: 90px; height: 90px; } }
 .badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
@@ -547,7 +528,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .badge-medal .icon { width: 24px; height: 24px; }
 .badge.is-earned { border-style: solid; background: var(--surface); opacity: 1; box-shadow: var(--shadow); }
 .badge.is-earned .badge-medal { background: linear-gradient(135deg, #FFD95A, #F2A33A); color: #6B3B00; box-shadow: 0 0 0 3px #FFF1C2; }
-:root[data-theme="gaming"] .badge.is-earned .badge-medal { box-shadow: 0 0 0 3px rgba(255, 217, 90, .3), 0 0 18px rgba(255, 194, 61, .55); }
 .badge-date { color: var(--good); font-weight: 600; margin-top: 2px; }
 
 /* ============ Einstellungen ============ */
@@ -589,6 +569,45 @@ body.is-studying .toast-action { pointer-events: auto; }
 .ws-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: var(--accent-soft); color: var(--accent); flex: none; }
 .welcome-step p { margin-top: 2px; font-size: .94rem; }
 
+/* ============ Version 1.2: Filter, Import, Quelle, Sicherung, Tasten ============ */
+.lib-toolbar { position: sticky; top: 0; z-index: 6; display: flex; gap: 8px; align-items: center; padding: 10px 0; margin: -10px 0 4px; background: var(--bg); }
+.lib-toolbar .search-box { flex: 1; max-width: 560px; }
+.filter-btn { min-height: 48px; border-radius: 12px; }
+.filter-btn.is-active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.filter-pop { width: 340px; padding: 14px; }
+.filter-panel { display: grid; gap: 14px; }
+.fp-group { display: grid; gap: 8px; }
+.fp-label { font-weight: 650; font-size: .9rem; }
+.filter-panel .chips { margin: 0; }
+.filter-panel .seg { flex-wrap: wrap; }
+.filter-panel .seg-btn { padding: 7px 10px; font-size: .88rem; }
+.chip-count { margin-left: 6px; font-size: .78rem; opacity: .75; font-variant-numeric: tabular-nums; }
+.active-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 4px; }
+.chip-x span { margin-left: 6px; }
+.bulk-bar { top: 70px; }
+.card-source { display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 12px; font-size: .82rem; color: var(--ink-2); }
+.card-source .icon { width: 15px; height: 15px; }
+.report-files { display: grid; gap: 8px; margin: 4px 0 10px; }
+.report-file { padding: 10px 12px; border-radius: 10px; background: var(--surface-2); }
+.report-file-name { display: flex; gap: 6px; align-items: center; font-weight: 650; overflow-wrap: anywhere; }
+.report-file-name .icon { width: 16px; height: 16px; color: var(--ink-2); }
+.report-file-line { font-size: .9rem; color: var(--ink-2); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.report-file-line.is-error { color: var(--again); }
+.import-details { display: grid; gap: 12px; margin-top: 10px; }
+.detail-file { display: grid; gap: 8px; }
+.dup-list, .missing-list { background: var(--surface-2); padding: 12px 14px; border-radius: 10px; font-size: .9rem; display: grid; gap: 8px; }
+.dup-list ul { margin: 0; padding-left: 18px; max-height: 180px; overflow-y: auto; }
+.missing-rows { display: grid; gap: 6px; max-height: 220px; overflow-y: auto; }
+.missing-list .btn { justify-self: start; }
+.file-list { overflow-wrap: anywhere; text-align: center; }
+.backup-nudge { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: var(--radius-l); background: var(--surface); border: 1px solid var(--line); }
+.backup-nudge > .icon { color: var(--accent); width: 22px; height: 22px; flex: none; }
+.bn-text { flex: 1; display: grid; gap: 2px; min-width: 0; }
+@media (max-width: 600px) { .backup-nudge { flex-wrap: wrap; } .backup-nudge .btn { order: 3; } }
+.preset-pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; margin: 4px 0 12px; }
+.preset-opt { display: grid; gap: 3px; text-align: left; padding: 12px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.preset-opt.is-selected { border-color: var(--accent); background: var(--accent-soft); }
+
 /* ============ Lernmodus ============ */
 .study-screen { min-height: 100vh; min-height: 100dvh; max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; padding: 10px 16px calc(14px + env(safe-area-inset-bottom)); }
 .study-screen.flash { animation: flash .45s; }
@@ -601,7 +620,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .study-progress { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
 :root[data-theme="clean"] .study-progress { background: var(--bg-2); }
 .study-progress-fill { height: 100%; width: 0; border-radius: inherit; background: var(--good); transition: width .35s var(--ease); }
-:root[data-theme="gaming"] .study-progress-fill { box-shadow: 0 0 10px var(--good); }
 .combo-chip, .xp-chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 9px; border-radius: 99px; font-size: .8rem; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .combo-chip { background: var(--hard-soft); color: var(--hard); animation: pop .2s var(--ease); }
 .xp-chip { background: var(--easy-soft); color: var(--easy); }
@@ -627,8 +645,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .study-card.fly-right { transform: translateX(120%) rotate(14deg) !important; opacity: 0; }
 .study-card.fly-left { transform: translateX(-120%) rotate(-14deg) !important; opacity: 0; }
 .study-card.fly-up { transform: translateY(-110%) !important; opacity: 0; }
-:root[data-theme="gaming"] .study-card.is-ok { box-shadow: 0 0 0 1px var(--good), 0 0 40px -6px var(--good); }
-:root[data-theme="gaming"] .study-card.is-bad { box-shadow: 0 0 0 1px var(--again), 0 0 40px -6px var(--again); }
 .card-tag { position: absolute; top: 13px; left: clamp(18px, 4vw, 34px); right: 18px; display: flex; gap: 8px; align-items: center; font-size: .8rem; font-weight: 650; color: var(--ink-2); }
 .card-tag .icon { width: 16px; height: 16px; }
 .leech-tag, .new-tag { padding: 2px 8px; border-radius: 99px; font-size: .72rem; }
@@ -710,8 +726,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .match-img img { max-height: 84px; max-width: 100%; border-radius: 8px; display: block; }
 .match-item[data-pair="0"] { --pc: #2F5BEA; } .match-item[data-pair="1"] { --pc: #D98A1C; } .match-item[data-pair="2"] { --pc: #7A5BD6; }
 .match-item[data-pair="3"] { --pc: #0E9AA7; } .match-item[data-pair="4"] { --pc: #C2457A; } .match-item[data-pair="5"] { --pc: #6B8E23; }
-:root[data-theme="gaming"] .match-item[data-pair="0"] { --pc: #3DF5FF; } :root[data-theme="gaming"] .match-item[data-pair="1"] { --pc: #FFC23D; } :root[data-theme="gaming"] .match-item[data-pair="2"] { --pc: #B78CFF; }
-:root[data-theme="gaming"] .match-item[data-pair="3"] { --pc: #3DFFA5; } :root[data-theme="gaming"] .match-item[data-pair="4"] { --pc: #FF4FD8; } :root[data-theme="gaming"] .match-item[data-pair="5"] { --pc: #D4FF4F; }
 .match-item:not([data-pair=""]):not(.is-ok):not(.is-bad) { border-color: var(--pc); background: color-mix(in srgb, var(--pc) 12%, var(--surface)); }
 .match-item:not([data-pair=""]) .key-badge { background: var(--pc); color: #fff; border-color: var(--pc); }
 .match-item.is-ok { border-color: var(--good); background: var(--good-soft); }
@@ -787,7 +801,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .rate-btn .rate-label { color: var(--rc); }
 .rate-btn:hover { background: var(--rs); border-color: var(--rc); }
 .rate-btn.is-suggested { background: var(--rs); border-color: var(--rc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--rc) 25%, transparent); }
-:root[data-theme="gaming"] .rate-btn.is-suggested { box-shadow: 0 0 22px -4px var(--rc); }
 .rate-hint { max-width: 60ch; }
 @media (max-width: 520px) { .rate-btn kbd { display: none; } .rate-label { font-size: .92rem; } .rating-bar { gap: 6px; } }
 
@@ -799,7 +812,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .stamp-good { left: 22px; color: var(--good); transform: rotate(-14deg); }
 .stamp-again { right: 22px; color: var(--again); transform: rotate(12deg); }
 .stamp-hard { left: 50%; top: auto; bottom: 40px; color: var(--hard); transform: translateX(-50%) rotate(-4deg); }
-:root[data-theme="gaming"] .stamp { text-shadow: 0 0 10px currentColor; box-shadow: 0 0 14px currentColor, inset 0 0 10px currentColor; }
 
 /* Bossrunde */
 .boss-bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: var(--radius-l); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); margin: 4px 0; }
@@ -810,7 +822,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .boss-name { font-weight: 700; font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .boss-hp { height: 12px; border-radius: 99px; background: var(--again-soft); overflow: hidden; }
 .boss-hp-fill { height: 100%; background: linear-gradient(90deg, var(--again), #FF8A5C); border-radius: inherit; transition: width .4s var(--ease); }
-:root[data-theme="gaming"] .boss-hp-fill { box-shadow: 0 0 12px var(--again); }
 .lives { display: flex; gap: 2px; }
 .life { color: var(--again); } .life .icon { width: 22px; height: 22px; fill: currentColor; }
 .life.is-lost { color: var(--ink-3); opacity: .5; } .life.is-lost .icon { fill: none; }
@@ -842,7 +853,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 
 /* ============ Fantasy-RPG ============ */
 :root { --r-common: #7C8699; --r-rare: #2F7FEA; --r-epic: #8B4FE0; --r-legendary: #E08E0B; --gold: #C98A0A; --gold-soft: #FBF0D4; }
-:root[data-theme="gaming"] { --r-common: #A9B2C6; --r-rare: #4DA3FF; --r-epic: #B57BFF; --r-legendary: #FFB52E; --gold: #FFC93D; --gold-soft: rgba(255, 201, 61, .14); }
 .r-common { --rc: var(--r-common); } .r-rare { --rc: var(--r-rare); } .r-epic { --rc: var(--r-epic); } .r-legendary { --rc: var(--r-legendary); }
 .rarity { display: inline-block; font-size: .72rem; font-weight: 750; padding: 2px 8px; border-radius: 99px; color: var(--rc); background: color-mix(in srgb, var(--rc) 14%, transparent); border: 1px solid color-mix(in srgb, var(--rc) 45%, transparent); white-space: nowrap; }
 .rarity-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--rc); margin-left: 6px; vertical-align: middle; }
@@ -864,11 +874,11 @@ body.is-studying .toast-action { pointer-events: auto; }
 .hero-figure svg { display: block; overflow: visible; }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 18px; margin-top: 16px; }
 @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
-.hero-card { display: flex; gap: 20px; align-items: center; }
-.hero-card .hero-figure { flex: none; padding: 6px 10px; border-radius: 16px; background: radial-gradient(circle at 50% 65%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%); }
+.hero-char-card { display: flex; gap: 20px; align-items: center; }
+.hero-char-card .hero-figure { flex: none; padding: 6px 10px; border-radius: 16px; background: radial-gradient(circle at 50% 65%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%); }
 .hero-id { display: grid; gap: 6px; min-width: 0; flex: 1; }
 .hero-id h2 { font-size: 1.5rem; overflow-wrap: anywhere; }
-@media (max-width: 520px) { .hero-card { flex-direction: column; text-align: center; } .hero-id .btn-row { justify-content: center; } }
+@media (max-width: 520px) { .hero-char-card { flex-direction: column; text-align: center; } .hero-id .btn-row { justify-content: center; } }
 .stats-card { display: grid; gap: 4px; }
 .stat-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
 .stat-row:first-of-type { border-top: 0; }
@@ -891,7 +901,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 /* Boss */
 .boss-card { display: flex; gap: 16px; align-items: center; padding: 16px 18px; border-radius: var(--radius-l); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); flex: 1; min-width: 0; }
 .boss-portrait { font-size: 3.2rem; line-height: 1; width: 76px; height: 76px; display: grid; place-items: center; border-radius: 20px; background: var(--again-soft); flex: none; }
-:root[data-theme="gaming"] .boss-portrait { box-shadow: 0 0 24px -4px var(--again); }
 .boss-card-main { flex: 1; display: grid; gap: 7px; min-width: 0; }
 .boss-card-name { font-size: 1.05rem; }
 .hpbar { height: 14px; border-radius: 99px; background: var(--again-soft); overflow: hidden; }
@@ -917,7 +926,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .slot-icon .icon { width: 22px; height: 22px; }
 .slot-item { font-weight: 650; overflow-wrap: anywhere; }
 .slot-stats { color: var(--ink-2); }
-:root[data-theme="gaming"] .slot-tile.r-epic, :root[data-theme="gaming"] .slot-tile.r-legendary { box-shadow: 0 0 20px -6px var(--rc); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
 .chip { border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); padding: 6px 12px; border-radius: 99px; cursor: pointer; font-weight: 600; font-size: .88rem; }
 .chip.is-active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
@@ -973,7 +981,6 @@ body.is-studying .toast-action { pointer-events: auto; }
 .shop-gem { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: color-mix(in srgb, var(--rc) 16%, transparent); color: var(--rc); }
 .shop-gem .icon { width: 24px; height: 24px; }
 .shop-card .btn { width: 100%; margin-top: 4px; }
-:root[data-theme="gaming"] .shop-card.r-legendary { box-shadow: 0 0 26px -8px var(--rc); }
 .reward-list, .history { display: grid; gap: 8px; }
 .reward-row { display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
 .reward-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 10px; background: var(--easy-soft); color: var(--easy); flex: none; }
@@ -1000,6 +1007,48 @@ body.is-studying .toast-action { pointer-events: auto; }
 .swatch.is-selected { box-shadow: 0 0 0 3px var(--accent); }
 .creator-actions { margin-top: 20px; justify-content: flex-end; }
 .look-box .chips { margin-bottom: 0; }
+
+/* ============ Gaming-Design (ruhig, dunkel, Violett) ============ */
+:root[data-theme="gaming"] {
+  --r-common: #ABA5B8; --r-rare: #6FA8F2; --r-epic: #D690F2; --r-legendary: #F0B046;
+  --gold: #E9C25A; --gold-soft: rgba(233, 194, 90, .12);
+}
+:root[data-theme="gaming"] .nav { background: #110D19; }
+:root[data-theme="gaming"] .brand-mark i { border-color: var(--accent); }
+:root[data-theme="gaming"] .nav-link.is-active { box-shadow: inset 3px 0 0 var(--accent); }
+@media (max-width: 899px) { :root[data-theme="gaming"] .nav-link.is-active { box-shadow: inset 0 3px 0 var(--accent); } }
+:root[data-theme="gaming"] .index-card { --card-bg: #17121F; }
+:root[data-theme="gaming"] .toast { background: #241D31; color: var(--ink); border: 1px solid var(--line); }
+:root[data-theme="gaming"] .overlay { background: rgba(5, 3, 10, .72); }
+:root[data-theme="gaming"] .freeze { background: rgba(143, 178, 238, .14); color: var(--easy) !important; }
+:root[data-theme="gaming"] .freeze .icon { color: var(--easy) !important; }
+:root[data-theme="gaming"] .stack-sheet { background: var(--surface-2); border-color: var(--line); }
+:root[data-theme="gaming"] .xpbar-fill { background: var(--accent); }
+:root[data-theme="gaming"] .hpbar-fill, :root[data-theme="gaming"] .boss-hp-fill { background: var(--again); }
+:root[data-theme="gaming"] .btn-primary { box-shadow: none; }
+:root[data-theme="gaming"] .btn-danger { color: #1A0F14; }
+:root[data-theme="gaming"] .due-badge { color: #1A0F14; }
+:root[data-theme="gaming"] .theme-gaming { background: #17121F; color: #ECE8F3; }
+:root[data-theme="gaming"] .theme-gaming .muted { color: #B3ABC6; }
+:root[data-theme="gaming"] .badge.is-earned .badge-medal { box-shadow: 0 0 0 3px rgba(240, 176, 70, .25); }
+:root[data-theme="gaming"] .match-item[data-pair="0"] { --pc: #A592EE; }
+:root[data-theme="gaming"] .match-item[data-pair="1"] { --pc: #D9A95E; }
+:root[data-theme="gaming"] .match-item[data-pair="2"] { --pc: #8FB2EE; }
+:root[data-theme="gaming"] .match-item[data-pair="3"] { --pc: #6CC59A; }
+:root[data-theme="gaming"] .match-item[data-pair="4"] { --pc: #E5838F; }
+:root[data-theme="gaming"] .match-item[data-pair="5"] { --pc: #C9B98A; }
+:root[data-theme="gaming"] .match-item:not([data-pair=""]) .key-badge { color: #120E1C; }
+:root[data-theme="gaming"] .stamp { background: rgba(13, 10, 20, .8); }
+
+/* Leuchten nur noch bei Treffern, kritischen Treffern und legendärer Beute */
+:root[data-theme="gaming"] .boss-avatar.hit { filter: drop-shadow(0 0 10px rgba(229, 131, 143, .8)); }
+:root[data-theme="gaming"] .float-dmg { text-shadow: 0 0 8px rgba(229, 131, 143, .55); }
+:root[data-theme="gaming"] .float-dmg.is-crit { color: var(--r-legendary); text-shadow: 0 0 12px rgba(240, 176, 70, .8); }
+:root[data-theme="gaming"] .loot-item.r-epic .item-tile { box-shadow: 0 0 0 2px var(--rc); }
+:root[data-theme="gaming"] .loot-item.r-legendary .item-tile,
+:root[data-theme="gaming"] .slot-tile.r-legendary,
+:root[data-theme="gaming"] .shop-card.r-legendary { box-shadow: 0 0 0 1px var(--rc), 0 0 22px -6px rgba(240, 176, 70, .55); }
+:root[data-theme="gaming"] .chest-big.is-open { filter: none; }
 </style>
 </head>
 <body>
@@ -1010,7 +1059,7 @@ body.is-studying .toast-action { pointer-events: auto; }
 /* ---- 00-util.js ---- */
 'use strict';
 /* Allgemeine Hilfsfunktionen */
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 const MIN = 60e3, HOUR = 36e5, DAY = 864e5;
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -1427,6 +1476,8 @@ const DEFAULT_SETTINGS = {
   dayStartHour: 4,
   ttsLang: 'de-DE',
   onboarded: false,
+  keyPreset: 'standard',
+  backup: { last: null, since: null, importNudge: null },
 };
 const DEFAULT_PROFILE = {
   xp: 0, streak: 0, bestStreak: 0, freezes: 0, lastGoalDay: null, frozenDays: [],
@@ -1461,6 +1512,8 @@ const Store = {
     State.mediaIndex = new Map(media.map((m) => [m.data, m.id]));
     const metaMap = Object.fromEntries(meta.map((m) => [m.key, m.value]));
     State.settings = { ...DEFAULT_SETTINGS, ...(metaMap.settings || {}) };
+    State.settings.backup = { ...DEFAULT_SETTINGS.backup, ...(State.settings.backup || {}) };
+    if (!State.settings.backup.since) { State.settings.backup.since = Date.now(); this.saveSettings(); }
     State.profile = mergeProfile(metaMap.profile);
     DAY_START_HOUR = State.settings.dayStartHour;
     Gami.checkStreakOnLoad();
@@ -1586,7 +1639,7 @@ const Store = {
     const err = def.validate(data);
     if (err) throw new Error(err);
     const now = Date.now();
-    const base = { folderId, type, created: now, updated: now, leech: false, tags: opts.tags || [] };
+    const base = { folderId, type, created: now, updated: now, leech: false, tags: opts.tags || [], source: String(opts.source || '').trim(), key: opts.key ? String(opts.key) : null };
     const out = [];
     if (type === 'occlusion') {
       const groupId = uid();
@@ -1595,7 +1648,7 @@ const Store = {
       const { reverse, ...rest } = data;
       out.push({ ...base, id: uid(), data: rest, srs: opts.srs || FSRS.newState() });
       if (type === 'basic' && reverse) {
-        out.push({ ...base, id: uid(), data: { front: rest.back, back: rest.front, frontImage: rest.backImage || null, backImage: rest.frontImage || null, hint: '', note: rest.note || '' }, srs: FSRS.newState(), reverseOf: out[0].id });
+        out.push({ ...base, key: base.key ? `${base.key}~r` : null, id: uid(), data: { front: rest.back, back: rest.front, frontImage: rest.backImage || null, backImage: rest.frontImage || null, hint: '', note: rest.note || '' }, srs: FSRS.newState(), reverseOf: out[0].id });
       }
     }
     out.forEach((c) => State.cards.set(c.id, c));
@@ -1609,7 +1662,7 @@ const Store = {
     return out;
   },
   /** Ändert eine Karte. Bei Bildbereich-Karten wird die ganze Gruppe angepasst. */
-  async updateCard(id, rawData) {
+  async updateCard(id, rawData, extra = {}) {
     const card = State.cards.get(id);
     if (!card) throw new Error('Karte nicht gefunden');
     const def = CardTypes[card.type];
@@ -1628,6 +1681,7 @@ const Store = {
         else keep.push({ ...card, id: uid(), data: { ...data, target: m.id }, srs: FSRS.newState(), created: now, updated: now, leech: false });
       }
       for (const c of byTarget.values()) remove.push(c.id);
+      if ('source' in extra) keep.forEach((c) => { c.source = String(extra.source || '').trim(); });
       keep.forEach((c) => State.cards.set(c.id, c));
       remove.forEach((i) => State.cards.delete(i));
       await DB.putMany('cards', keep);
@@ -1635,6 +1689,7 @@ const Store = {
     } else {
       const { reverse, ...rest } = data;
       card.data = rest; card.updated = now;
+      if ('source' in extra) card.source = String(extra.source || '').trim();
       if (card.leech) { card.leech = false; card.leechCleared = card.srs.lapses; }
       await DB.put('cards', card);
     }
@@ -1661,6 +1716,30 @@ const Store = {
     await this.gcMedia();
     Bus.emit('data');
   },
+  /** Momentaufnahme von Karten (inkl. Bildgruppe und Bildern) für „Rückgängig“ */
+  snapshot(ids) {
+    const all = new Set();
+    ids.forEach((id) => { const c = State.cards.get(id); if (c) this.groupOf(c).forEach((g) => all.add(g.id)); });
+    const cards = Array.from(all).map((id) => deepClone(State.cards.get(id)));
+    const refs = new Set();
+    cards.forEach((c) => collectMediaRefs(c.data, refs));
+    const media = Array.from(refs).filter((m) => State.media.has(m)).map((m) => ({ id: m, data: State.media.get(m) }));
+    return { cards, media };
+  },
+  async restoreSnapshot(snap) {
+    for (const m of snap.media) { if (!State.media.has(m.id)) { State.media.set(m.id, m.data); State.mediaIndex.set(m.data, m.id); } }
+    await DB.putMany('media', snap.media);
+    const valid = snap.cards.filter((c) => State.folders.has(c.folderId));
+    valid.forEach((c) => State.cards.set(c.id, deepClone(c)));
+    await DB.putMany('cards', valid);
+    Bus.emit('data');
+    return valid.length;
+  },
+  findByKey(key) {
+    if (!key) return null;
+    for (const c of State.cards.values()) if (c.key === key) return c;
+    return null;
+  },
   async moveCards(ids, folderId) {
     const changed = [];
     const all = new Set();
@@ -1678,7 +1757,7 @@ const Store = {
   search(query, folderId = null) {
     const q = normalizeAnswer(query);
     if (!q) return [];
-    return this.cardsIn(folderId).filter((c) => normalizeAnswer(CardTypes[c.type].searchText(c.data)).includes(q));
+    return this.cardsIn(folderId).filter((c) => normalizeAnswer(`${CardTypes[c.type].searchText(c.data)} ${c.source || ''}`).includes(q));
   },
 
   /* ---------- Fällige Karten ---------- */
@@ -1924,7 +2003,7 @@ const CardTypes = {
         ctx.done({ suggested: null, speakText: d.back });
       }
       return { el, needsReveal: true, reveal: flip, speakText: () => (flipped ? d.back : d.front),
-        onKey(e) { if (!flipped && (e.key === ' ' || e.key === 'Enter')) { flip(); return true; } return false; } };
+        onKey(e) { if (!flipped && Keys.isFlip(e)) { flip(); return true; } return false; } };
     },
   },
 
@@ -2207,11 +2286,11 @@ const CardTypes = {
       const d = card.data;
       let answered = false;
       const result = h('div', { class: 'result-area' });
-      const bFalse = h('button', { class: 'tf-btn tf-false', type: 'button', onClick: (e) => { e.stopPropagation(); answer(false); } }, Icons.get('x'), 'Falsch', h('kbd', {}, '←'));
-      const bTrue = h('button', { class: 'tf-btn tf-true', type: 'button', onClick: (e) => { e.stopPropagation(); answer(true); } }, Icons.get('check'), 'Wahr', h('kbd', {}, '→'));
+      const bFalse = h('button', { class: 'tf-btn tf-false', type: 'button', onClick: (e) => { e.stopPropagation(); answer(false); } }, Icons.get('x'), 'Falsch', h('kbd', {}, Keys.label('left')));
+      const bTrue = h('button', { class: 'tf-btn tf-true', type: 'button', onClick: (e) => { e.stopPropagation(); answer(true); } }, Icons.get('check'), 'Wahr', h('kbd', {}, Keys.label('right')));
       const row = h('div', { class: 'tf-row' }, bFalse, bTrue);
       const el = h('div', { class: 'face face-single' }, h('div', { class: 'face-q' }, sideContent(d.statement, d.image)),
-        h('p', { class: 'muted small' }, isTouch() ? 'Wische nach rechts für „wahr“, nach links für „falsch“.' : 'Pfeil rechts = wahr, Pfeil links = falsch.'), row, result);
+        h('p', { class: 'muted small' }, isTouch() ? 'Wische nach rechts für „wahr“, nach links für „falsch“.' : `${Keys.label('right')} = wahr, ${Keys.label('left')} = falsch.`), row, result);
       function answer(v) {
         if (answered) return;
         answered = true;
@@ -2226,8 +2305,9 @@ const CardTypes = {
         onSwipe(dir) { if (answered) return false; if (dir === 'right') { answer(true); return true; } if (dir === 'left') { answer(false); return true; } return false; },
         onKey(e) {
           if (answered) return false;
-          if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'w') { answer(true); return true; }
-          if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'f') { answer(false); return true; }
+          const dir = Keys.dir(e), std = Keys.id() === 'standard';
+          if (dir === 'right' || (std && Keys.norm(e) === 'w')) { answer(true); return true; }
+          if (dir === 'left' || (std && Keys.norm(e) === 'f')) { answer(false); return true; }
           return false;
         } };
     },
@@ -2383,7 +2463,7 @@ const CardTypes = {
         ctx.done({ suggested: null, speakText: target.label });
       }
       return { el, needsReveal: true, reveal, speakText: () => (revealed ? target.label : d.prompt),
-        onKey(e) { if (!revealed && (e.key === ' ' || e.key === 'Enter')) { reveal(); return true; } return false; } };
+        onKey(e) { if (!revealed && Keys.isFlip(e)) { reveal(); return true; } return false; } };
     },
   },
 };
@@ -2434,7 +2514,7 @@ const IO = {
       const data = deepClone(c.data);
       if (c.type === 'occlusion') delete data.target;
       collectMediaRefs(data, { add: (id) => { if (State.media.has(id)) media[id] = State.media.get(id); } });
-      cards.push({ type: c.type, folder: relPath(c.folderId), ...data, ...(c.tags?.length ? { tags: c.tags } : {}) });
+      cards.push({ type: c.type, folder: relPath(c.folderId), ...data, ...(c.tags?.length ? { tags: c.tags } : {}), ...(c.key ? { key: c.key } : {}), ...(c.source ? { source: c.source } : {}) });
     }
     return { format: FORMAT, version: 1, kind: 'deck', exported: new Date().toISOString(), folders, cards, media };
   },
@@ -2464,9 +2544,22 @@ const IO = {
     return json;
   },
 
-  /** Importiert einen Kartenstapel in den Zielordner (null = oberste Ebene). */
+  /** Fingerabdruck für die Duplikaterkennung: Typ + Frage + Antwort */
+  signature(type, data) {
+    const [q, a] = CardTypes[type].summary(data);
+    return `${type}|${normalizeAnswer(q)}|${normalizeAnswer(a)}`;
+  },
+  stable(data) {
+    const { target, reverse, ...rest } = data || {};
+    const sortKeys = (v) => (Array.isArray(v) ? v.map(sortKeys) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, sortKeys(v[k])])) : v);
+    return JSON.stringify(sortKeys(rest));
+  },
+
+  /** Importiert einen Kartenstapel in den Zielordner (null = oberste Ebene).
+   *  Standards: gleicher key → aktualisieren (Lernstand bleibt); ohne key und gleiche Frage/Antwort im Ordner → überspringen;
+   *  Karten mit key, die in der Datei fehlen → behalten und melden. */
   async importDeck(json, targetFolderId = null) {
-    const report = { cards: 0, folders: 0, skipped: [], warnings: [] };
+    const report = { cards: 0, created: 0, updated: 0, unchanged: 0, folders: 0, skipped: [], duplicates: [], missing: [], warnings: [] };
     const folderCountBefore = State.folders.size;
     const media = json.media || {};
     const resolve = (v) => {
@@ -2492,6 +2585,12 @@ const IO = {
       for (const k of ['emoji', 'color', 'examDate', 'lang']) if (f[k]) patch[k] = f[k];
       if (Object.keys(patch).length) await Store.updateFolder(id, patch);
     }
+    const sigCache = new Map();
+    const sigsOf = (folderId) => {
+      if (!sigCache.has(folderId)) sigCache.set(folderId, new Set(Store.cardsIn(folderId, false).map((c) => this.signature(c.type, c.data))));
+      return sigCache.get(folderId);
+    };
+    const seenKeys = new Set(), keyFolders = new Set();
     let fallbackFolder = targetFolderId;
     for (let i = 0; i < json.cards.length; i++) {
       const raw = json.cards[i];
@@ -2506,22 +2605,80 @@ const IO = {
           if (!fallbackFolder) fallbackFolder = await Store.folderByPath(json.title || json.name || 'Importiert', null);
           folderId = fallbackFolder;
         }
-        const { type: _t, folder: _f, deck: _d, tags, ...data } = raw;
-        const created = await Store.createCards(type, folderId, resolve(data), { silent: true, tags: Array.isArray(tags) ? tags : [] });
-        report.cards += created.length;
+        const { type: _t, folder: _f, deck: _d, tags, key: rawKey, source: rawSource, ...rest } = raw;
+        const key = rawKey != null && String(rawKey).trim() ? String(rawKey).trim() : null;
+        const source = rawSource != null ? String(rawSource).trim() : '';
+        const def = CardTypes[type];
+        const data = await Store.internImages(def.normalize(resolve(rest)));
+        const err = def.validate(data);
+        if (err) throw new Error(err);
+        const opts = { silent: true, tags: Array.isArray(tags) ? tags : [], source, key };
+        if (key) {
+          seenKeys.add(key);
+          if (type === 'basic' && data.reverse) seenKeys.add(`${key}~r`);
+          keyFolders.add(folderId);
+          const existing = Store.findByKey(key);
+          if (existing) {
+            keyFolders.add(existing.folderId);
+            const r = await this.updateExisting(existing, type, data, source, opts);
+            report[r]++;
+            if (type === 'basic' && data.reverse) {
+              const rev = { front: data.back, back: data.front, frontImage: data.backImage || null, backImage: data.frontImage || null, hint: '', note: data.note || '' };
+              const exRev = Store.findByKey(`${key}~r`);
+              if (exRev) report[await this.updateExisting(exRev, 'basic', rev, source, opts)]++;
+              else { await Store.createCards('basic', existing.folderId, rev, { ...opts, key: `${key}~r` }); report.created++; }
+            }
+            continue;
+          }
+        }
+        const sig = this.signature(type, data);
+        if (!key && sigsOf(folderId).has(sig)) {
+          report.duplicates.push({ index: i + 1, text: CardTypes[type].summary(data)[0], folder: Store.folderPathString(folderId) });
+          continue;
+        }
+        const created = await Store.createCards(type, folderId, data, opts);
+        sigsOf(folderId).add(sig);
+        report.created += created.length;
       } catch (e) {
         report.skipped.push({ index: i + 1, reason: e.message });
       }
     }
+    // Karten mit key in betroffenen Ordnern, die in der Datei nicht mehr vorkommen
+    if (seenKeys.size) {
+      const groups = new Set();
+      for (const c of State.cards.values()) {
+        if (!c.key || !keyFolders.has(c.folderId) || seenKeys.has(c.key)) continue;
+        const g = c.groupId || c.id;
+        if (groups.has(g)) continue;
+        groups.add(g);
+        report.missing.push({ id: c.id, text: CardTypes[c.type].summary(c.data)[0], folder: Store.folderPathString(c.folderId) });
+      }
+    }
+    report.cards = report.created;
     report.folders = State.folders.size - folderCountBefore;
-    if (report.cards) {
+    if (report.created || report.updated) {
       State.profile.totals.imports++;
-      State.profile.totals.created += report.cards;
+      State.profile.totals.created += report.created;
       await Store.saveProfile();
     }
     Bus.emit('data');
     Badges.evaluate();
     return report;
+  },
+
+  /** Aktualisiert eine vorhandene Karte (Lernstand bleibt). Ergebnis: 'updated' | 'unchanged' */
+  async updateExisting(existing, type, data, source, opts) {
+    const sameData = existing.type === type && this.stable(existing.data) === this.stable(data);
+    if (sameData && (existing.source || '') === source) return 'unchanged';
+    if (existing.type !== type || type === 'occlusion' !== (existing.type === 'occlusion')) {
+      const srs = existing.srs;
+      const folderId = existing.folderId;
+      await Store.deleteCards([existing.id]);
+      const made = await Store.createCards(type, folderId, data, { ...opts, srs: type === 'occlusion' ? undefined : srs });
+      return made.length ? 'updated' : 'unchanged';
+    }
+    await Store.updateCard(existing.id, data, { source });
+    return 'updated';
   },
 
   /** Stellt eine vollständige Sicherung wieder her (ersetzt alle Daten). */
@@ -2557,6 +2714,79 @@ const IO = {
   fileName(base, kind) {
     const safe = String(base || 'merkwerk').normalize('NFKD').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-').toLowerCase() || 'merkwerk';
     return `${safe}-${kind}-${dayKey()}.json`;
+  },
+};
+
+/* ---- 07-keys.js ---- */
+/* Tastenbelegung: drei feste Vorlagen (keine freie Belegung) */
+const KEY_PRESETS = {
+  standard: {
+    name: 'Standard', desc: 'Leertaste umdrehen · 1–4 bewerten · Pfeiltasten wischen',
+    flip: [' '], rate: { 1: '1', 2: '2', 3: '3', 4: '4' }, left: ['arrowleft'], right: ['arrowright'], up: ['arrowup'], speak: 's',
+  },
+  left: {
+    name: 'Linke Hand', desc: 'Leertaste umdrehen · A S D F bewerten · A / D / W wischen',
+    flip: [' '], rate: { 1: 'a', 2: 's', 3: 'd', 4: 'f' }, left: ['a'], right: ['d'], up: ['w'], speak: 'q',
+  },
+  numpad: {
+    name: 'Ziffernblock', desc: '0 umdrehen · 1–4 bewerten · 4 / 6 / 8 wischen',
+    flip: ['0'], rate: { 1: '1', 2: '2', 3: '3', 4: '4' }, left: ['4'], right: ['6'], up: ['8'], speak: 's',
+  },
+};
+
+const Keys = {
+  preset() { return KEY_PRESETS[State.settings.keyPreset] || KEY_PRESETS.standard; },
+  id() { return KEY_PRESETS[State.settings.keyPreset] ? State.settings.keyPreset : 'standard'; },
+  /** Taste vereinheitlichen: Ziffernblock-Codes werden zu Ziffern, Buchstaben klein */
+  norm(e) {
+    const m = /^Numpad(\d)$/.exec(e.code || '');
+    if (m) return m[1];
+    return e.key.length === 1 ? e.key.toLowerCase() : e.key.toLowerCase();
+  },
+  isFlip(e) { const k = this.norm(e); return k === 'enter' || k === ' ' || this.preset().flip.includes(k); },
+  /** Bewertung 1–4 oder null. Ziffern 1–4 gelten in jeder Vorlage zusätzlich. */
+  rating(e) {
+    const k = this.norm(e);
+    for (const [g, key] of Object.entries(this.preset().rate)) if (key === k) return Number(g);
+    if (/^[1-4]$/.test(k) && !Object.values(this.preset().rate).includes(k) && !this.dirOf(k)) return Number(k);
+    return null;
+  },
+  dirOf(k) {
+    const p = this.preset();
+    if (p.left.includes(k)) return 'left';
+    if (p.right.includes(k)) return 'right';
+    if (p.up.includes(k)) return 'up';
+    return null;
+  },
+  /** Wischrichtung per Taste. Pfeiltasten gelten in jeder Vorlage zusätzlich. */
+  dir(e) {
+    const k = this.norm(e);
+    return this.dirOf(k) || { arrowleft: 'left', arrowright: 'right', arrowup: 'up' }[k] || null;
+  },
+  isSpeak(e) { return this.norm(e) === this.preset().speak; },
+  fmt(k) {
+    return { ' ': 'Leertaste', arrowleft: '←', arrowright: '→', arrowup: '↑', enter: 'Enter' }[k] || k.toUpperCase();
+  },
+  label(action, g) {
+    const p = this.preset();
+    if (action === 'rate') return this.fmt(p.rate[g]);
+    if (action === 'flip') return this.fmt(p.flip[0]);
+    if (action === 'speak') return this.fmt(p.speak);
+    return this.fmt(p[action][0]);
+  },
+  /** Liste für Einstellungen & Hilfe */
+  shortcutList() {
+    const L = (a, g) => this.label(a, g);
+    return [
+      [L('flip'), 'Karte umdrehen'],
+      [`${L('rate', 1)} · ${L('rate', 2)} · ${L('rate', 3)} · ${L('rate', 4)}`, 'Nochmal · Schwer · Gut · Leicht'],
+      [`${L('right')} / ${L('left')} / ${L('up')}`, 'wischen: gewusst / nochmal / schwer'],
+      ['Enter', 'prüfen bzw. Vorschlag übernehmen'],
+      ['1–9', 'Multiple Choice: Antwort wählen'], ['1–8 + A–H', 'Zuordnen'],
+      [`${L('left')} / ${L('right')}`, 'Wahr oder falsch'], ['Zahl, dann ↑/↓', 'Reihenfolge verschieben'],
+      ['H', 'Tipp zeigen'], [L('speak'), 'Vorlesen'], ['E', 'Karte bearbeiten'], ['Z', 'Bewertung rückgängig'], ['Esc', 'Lernrunde beenden'],
+      ['L', 'Startseite: Lernrunde starten'], ['N', 'Ordner: neue Karte'], ['/', 'Ordner: suchen'], ['Strg + Enter', 'Editor: speichern'],
+    ];
   },
 };
 
@@ -2618,6 +2848,7 @@ const Icons = (() => {
     star: '<path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+    filter: '<path d="M4 5h16l-6 7.5V19l-4 1.5v-8z"/>',
     helm: '<path d="M4 15a8 8 0 0 1 16 0v3h-5v-4H9v4H4z"/><path d="M12 7V3"/>',
     armor: '<path d="M8 3 4 5v6l2 1v9h12v-9l2-1V5l-4-2-4 3z"/><path d="M12 6v15"/>',
     shield: '<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8 7.5 9.5 4.3-1.5 7.5-4.9 7.5-9.5V6z"/>',
@@ -2750,6 +2981,15 @@ function toast(msg, kind = 'info', opts = {}) {
   const remove = () => { t.classList.add('is-leaving'); setTimeout(() => t.remove(), 250); };
   setTimeout(remove, opts.duration || (opts.action ? 6000 : 3200));
   return remove;
+}
+
+/** Hinweis mit „Rückgängig“ für Massenaktionen (10 Sekunden) */
+function undoToast(msg, snap, after) {
+  toast(msg, 'ok', { duration: 10000, action: { label: 'Rückgängig', fn: async () => {
+    const n = await Store.restoreSnapshot(snap);
+    toast(`${plural(n, 'Karte', 'Karten')} wiederhergestellt.`, 'ok');
+    after && after();
+  } } });
 }
 
 /* ---------- Klänge (Web Audio, ohne Dateien) ---------- */
@@ -2995,7 +3235,7 @@ function renderHome(main) {
         h('div', { class: 'tile-icon' }, Icons.get('shield')), h('h3', {}, 'Erschaffe deinen Helden'),
         h('p', {}, 'Mach aus jeder richtigen Antwort einen Treffer gegen Fantasy-Bosse. Besiegte Bosse lassen Truhen mit Gold und Ausrüstung zurück.'),
         h('div', { class: 'tile-meta' }, 'Held erstellen')));
-  main.append(head, hero, leechSec, rpgSec, examSec, challenge);
+  main.append(head, hero, backupNudge(), leechSec, rpgSec, examSec, challenge);
 }
 
 function modeTile(icon, title, text, meta, onClick, cls) {
@@ -3030,13 +3270,30 @@ function showLeeches() {
   });
 }
 
+/** Ruhiger Hinweis zur Sicherung (nach großen Importen und spätestens alle 7 Tage) */
+function backupNudge() {
+  const b = State.settings.backup;
+  if (!State.cards.size) return null;
+  const ref = Math.max(b.last || 0, b.since || 0) || Date.now();
+  const days = Math.floor((Date.now() - ref) / DAY);
+  const sinceLast = b.last ? Math.floor((Date.now() - b.last) / DAY) : null;
+  const imp = b.importNudge;
+  if (!imp && days < 7) return null;
+  const text = imp ? `Du hast gerade ${plural(imp.count, 'Karte', 'Karten')} importiert.`
+    : b.last ? `Letzte Sicherung vor ${plural(sinceLast, 'Tag', 'Tagen')}.` : 'Du hast noch keine Sicherung erstellt.';
+  return h('section', { class: 'section' }, h('div', { class: 'backup-nudge', id: 'backup-nudge' }, Icons.get('download'),
+    h('div', { class: 'bn-text' }, h('strong', {}, text), h('span', { class: 'muted small' }, 'Deine Daten liegen nur auf diesem Gerät. Eine Sicherung schützt sie und bringt sie aufs andere Gerät.')),
+    h('button', { class: 'btn btn-sm btn-primary', type: 'button', id: 'backup-now', onClick: exportBackup }, 'Jetzt sichern'),
+    iconBtn('x', 'Hinweis ausblenden', async () => { b.importNudge = null; b.since = Date.now(); await Store.saveSettings(); route(); }, 'bn-close')));
+}
+
 /* ---- 09-library.js ---- */
 /* Bibliothek: Ordner verwalten, Karten auflisten, suchen, verschieben, importieren & exportieren */
 const FOLDER_EMOJIS = ['📁', '📘', '📗', '📕', '📙', '🧬', '🧪', '⚗️', '🧮', '📐', '🌍', '🗺️', '🏛️', '⚖️', '💼', '💊', '🫀', '🧠', '🗣️', '🇬🇧', '🇫🇷', '🇪🇸', '🇮🇹', '💻', '🎵', '🎨', '⚽', '⭐'];
 const FOLDER_COLORS = ['#2F5BEA', '#179C6B', '#D98A1C', '#D6404A', '#7A5BD6', '#0E9AA7', '#5A6782'];
 const TTS_LANGS = [['de-DE', 'Deutsch'], ['de-AT', 'Deutsch (Österreich)'], ['en-GB', 'Englisch (UK)'], ['en-US', 'Englisch (US)'], ['fr-FR', 'Französisch'], ['es-ES', 'Spanisch'], ['it-IT', 'Italienisch'], ['la', 'Latein'], ['pt-PT', 'Portugiesisch'], ['nl-NL', 'Niederländisch'], ['ru-RU', 'Russisch'], ['ja-JP', 'Japanisch'], ['zh-CN', 'Chinesisch']];
 
-const Lib = { selectMode: false, selected: new Set(), query: '', shown: 60, folderId: null };
+const Lib = { selectMode: false, selected: new Set(), query: '', shown: 60, folderId: null, views: {} };
 
 function maturityLabel(card) {
   if (card.leech) return ['Problemkarte', 'st-leech'];
@@ -3096,7 +3353,8 @@ function folderTile(f) {
 
 function renderLibrary(main, folderId) {
   if (folderId && !State.folders.has(folderId)) { go('library'); return; }
-  if (Lib.folderId !== folderId) { Lib.folderId = folderId; Lib.selectMode = false; Lib.selected.clear(); Lib.shown = 60; Lib.query = ''; }
+  if (Lib.folderId !== folderId) { Lib.folderId = folderId; Lib.shown = 60; Lib.query = ''; }
+  Lib.selectMode = false; Lib.selected.clear();
   clear(main);
   const folder = folderId ? State.folders.get(folderId) : null;
   const path = folderId ? Store.folderPath(folderId) : [];
@@ -3131,21 +3389,181 @@ function renderLibrary(main, folderId) {
       h('p', { class: 'muted' }, plural(st.total, 'Karte', 'Karten'), st.due ? ` · ${st.due} heute fällig` : '', folder?.examDate && folder.examDate >= dayKey() ? ` · Prüfung am ${fmtDate(folder.examDate)}` : '')),
     headActions);
 
-  const searchInput = h('input', { class: 'input search-input', type: 'search', placeholder: folder ? `In „${folder.name}“ suchen …` : 'Alle Karten durchsuchen …', value: Lib.query, 'aria-label': 'Karten suchen' });
-  const searchBox = h('div', { class: 'search-box' }, Icons.get('search'), searchInput);
   const body = h('div', { class: 'lib-body' });
-  searchInput.addEventListener('input', debounce(() => { Lib.query = searchInput.value; Lib.shown = 60; renderLibBody(body, folderId); }, 150));
-
-  main.append(head, searchBox, body);
+  main.append(head, libToolbar(body, folderId, folder), body);
   renderLibBody(body, folderId);
+}
+
+/* ---------- Suchen, Filtern, Sortieren ---------- */
+const STATUS_FILTERS = [
+  ['due', 'Fällig'], ['new', 'Neu'], ['learning', 'Lernend'], ['mature', 'Sicher'], ['leech', 'Problemkarte'],
+];
+const SORTS = [['newest', 'Neueste'], ['alpha', 'Alphabetisch'], ['hard', 'Schwierigste zuerst']];
+function cardStatus(c, end = endOfToday()) {
+  const out = new Set();
+  const m = FSRS.maturity(c.srs);
+  out.add(m === 'new' ? 'new' : m === 'mature' ? 'mature' : 'learning');
+  if (c.srs.state !== 'new' && c.srs.due <= end) out.add('due');
+  if (c.leech) out.add('leech');
+  return out;
+}
+function libView(folderId) {
+  const key = folderId || '__root';
+  if (!Lib.views) Lib.views = {};
+  if (!Lib.views[key]) Lib.views[key] = { filters: new Set(), sort: 'newest' };
+  return Lib.views[key];
+}
+function sortCards(cards, sort) {
+  const q = (c) => plainText(CardTypes[c.type].summary(c.data)[0]).toLowerCase();
+  const hardness = (c) => (c.srs.state === 'new' ? -1 : (c.srs.d || 0) + (c.srs.lapses || 0) * 2 + (c.leech ? 10 : 0));
+  const arr = cards.slice();
+  if (sort === 'alpha') arr.sort((a, b) => q(a).localeCompare(q(b), 'de'));
+  else if (sort === 'hard') arr.sort((a, b) => hardness(b) - hardness(a) || b.created - a.created);
+  else arr.sort((a, b) => b.created - a.created);
+  return arr;
+}
+/** Basis für Filter: Suche (falls aktiv) im Ordner inkl. Unterordner */
+function libBase(folderId) {
+  return Lib.query.trim() ? Store.search(Lib.query, folderId) : Store.cardsIn(folderId, true);
+}
+function filterCounts(base) {
+  const end = endOfToday();
+  const counts = Object.fromEntries(STATUS_FILTERS.map(([k]) => [k, 0]));
+  base.forEach((c) => cardStatus(c, end).forEach((k) => { counts[k]++; }));
+  return counts;
+}
+function applyFilters(base, filters) {
+  if (!filters.size) return base;
+  const end = endOfToday();
+  return base.filter((c) => { const st = cardStatus(c, end); for (const f of filters) if (st.has(f)) return true; return false; });
+}
+
+function libToolbar(body, folderId, folder) {
+  const view = libView(folderId);
+  const searchInput = h('input', { class: 'input search-input', type: 'search', placeholder: folder ? `In „${folder.name}“ suchen …` : 'Alle Karten durchsuchen …', value: Lib.query, 'aria-label': 'Karten suchen' });
+  searchInput.addEventListener('input', debounce(() => { Lib.query = searchInput.value; Lib.shown = 60; renderLibBody(body, folderId); paintBtn(); }, 150));
+  const btn = h('button', { class: 'btn filter-btn', type: 'button', id: 'filter-btn', 'aria-haspopup': 'dialog' });
+  const paintBtn = () => {
+    clear(btn);
+    btn.append(Icons.get('filter'), h('span', {}, view.filters.size ? `Filter (${view.filters.size})` : 'Filter'));
+    btn.classList.toggle('is-active', view.filters.size > 0 || view.sort !== 'newest');
+  };
+  paintBtn();
+  btn.addEventListener('click', (e) => { e.stopPropagation(); openFilterPanel(btn, folderId, () => { Lib.shown = 60; renderLibBody(body, folderId); paintBtn(); }); });
+  Lib.repaintToolbar = paintBtn;
+  return h('div', { class: 'lib-toolbar' }, h('div', { class: 'search-box' }, Icons.get('search'), searchInput), btn);
+}
+
+function filterPanelBody(folderId, onChange) {
+  const view = libView(folderId);
+  const wrap = h('div', { class: 'filter-panel' });
+  const paint = () => {
+    clear(wrap);
+    const counts = filterCounts(libBase(folderId));
+    wrap.append(
+      h('div', { class: 'fp-group' }, h('div', { class: 'fp-label' }, 'Anzeigen'),
+        h('div', { class: 'chips' }, STATUS_FILTERS.map(([k, l]) => h('button', {
+          type: 'button', class: `chip ${view.filters.has(k) ? 'is-active' : ''}`, 'aria-pressed': String(view.filters.has(k)), dataset: { filter: k },
+          onClick: () => { view.filters.has(k) ? view.filters.delete(k) : view.filters.add(k); paint(); onChange(); },
+        }, l, h('span', { class: 'chip-count' }, String(counts[k])))))),
+      h('div', { class: 'fp-group' }, h('div', { class: 'fp-label' }, 'Sortieren'),
+        h('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Sortieren' }, SORTS.map(([k, l]) => h('button', {
+          type: 'button', role: 'radio', 'aria-checked': String(view.sort === k), class: `seg-btn ${view.sort === k ? 'is-active' : ''}`, dataset: { sort: k },
+          onClick: () => { view.sort = k; paint(); onChange(); },
+        }, l)))),
+      h('p', { class: 'muted small' }, 'Unterordner werden mit einbezogen. Mehrere Filter zeigen alle Karten, die zu mindestens einem passen.'),
+      view.filters.size || view.sort !== 'newest' ? h('button', { class: 'btn btn-sm btn-quiet', type: 'button', onClick: () => { view.filters.clear(); view.sort = 'newest'; paint(); onChange(); } }, Icons.get('rotate'), 'Zurücksetzen') : null);
+  };
+  paint();
+  return wrap;
+}
+function openFilterPanel(anchor, folderId, onChange) {
+  const existing = $('.filter-pop');
+  if (existing) { existing.remove(); return; }
+  if (innerWidth <= 600) {
+    Modal.open({ title: 'Filter und Sortieren', size: 'sm', className: 'filter-modal', body: filterPanelBody(folderId, onChange), actions: [{ label: 'Fertig', kind: 'primary' }] });
+    return;
+  }
+  const pop = h('div', { class: 'filter-pop menu-pop', role: 'dialog', 'aria-label': 'Filter und Sortieren' }, filterPanelBody(folderId, onChange));
+  document.body.appendChild(pop);
+  const place = () => {
+    const r = anchor.getBoundingClientRect();
+    pop.style.left = `${clamp(r.right - pop.offsetWidth, 8, innerWidth - pop.offsetWidth - 8)}px`;
+    pop.style.top = `${r.bottom + 6}px`;
+  };
+  place();
+  const off = (ev) => {
+    if (!pop.contains(ev.target) && ev.target !== anchor && !anchor.contains(ev.target)) close();
+  };
+  const esc = (ev) => { if (ev.key === 'Escape') { ev.preventDefault(); close(); anchor.focus(); } };
+  const close = () => { pop.remove(); document.removeEventListener('pointerdown', off, true); document.removeEventListener('keydown', esc, true); window.removeEventListener('scroll', place, true); };
+  setTimeout(() => document.addEventListener('pointerdown', off, true), 0);
+  document.addEventListener('keydown', esc, true);
+  window.addEventListener('scroll', place, true);
+  pop.querySelector('button')?.focus();
+}
+
+function bulkBar(body, folderId, visible) {
+  const n = Lib.selected.size;
+  const filtered = Lib.query.trim() || libView(folderId).filters.size;
+  const rerender = () => { Lib.selected.clear(); renderLibBody(body, folderId); };
+  return h('div', { class: 'bulk-bar' },
+    h('label', { class: 'check-all' }, h('input', { type: 'checkbox', id: 'select-all', checked: n === visible.length && n > 0, onChange: (e) => { Lib.selected = new Set(e.target.checked ? visible.map((c) => c.id) : []); renderLibBody(body, folderId); } }),
+      n ? `${n} ausgewählt` : filtered ? 'Alle gefilterten auswählen' : 'Alle auswählen'),
+    h('button', { class: 'btn btn-sm', type: 'button', disabled: !n, onClick: async () => {
+      const r = await folderPickerDialog({ title: `${plural(n, 'Karte', 'Karten')} verschieben`, allowRoot: false, ok: 'Verschieben' });
+      if (!r) return;
+      const snap = Store.snapshot([...Lib.selected]);
+      await Store.moveCards([...Lib.selected], r.id);
+      undoToast(`${plural(n, 'Karte', 'Karten')} verschoben.`, snap, () => route());
+      rerender();
+    } }, Icons.get('move'), 'Verschieben'),
+    h('button', { class: 'btn btn-sm', type: 'button', disabled: !n, onClick: async () => {
+      const snap = Store.snapshot([...Lib.selected]);
+      await Store.resetProgress([...Lib.selected]);
+      undoToast(`Fortschritt von ${plural(n, 'Karte', 'Karten')} zurückgesetzt.`, snap, () => route());
+      rerender();
+    } }, Icons.get('undo'), 'Zurücksetzen'),
+    h('button', { class: 'btn btn-sm btn-danger', type: 'button', disabled: !n, onClick: async () => {
+      const snap = Store.snapshot([...Lib.selected]);
+      await Store.deleteCards([...Lib.selected]);
+      undoToast(`${plural(snap.cards.length, 'Karte', 'Karten')} gelöscht.`, snap, () => route());
+      rerender();
+    } }, Icons.get('trash'), 'Löschen'));
+}
+
+function cardListSection(body, folderId, cards, { title, showFolder, learnable }) {
+  const sec = h('section', { class: 'section' });
+  const startLearn = () => startStudy({ folderId, mode: 'cram', cardIds: cards.map((c) => c.id), label: 'Üben: Auswahl' });
+  sec.appendChild(h('div', { class: 'section-row' }, h('h2', { class: 'section-title' }, title),
+    h('div', { class: 'btn-row' },
+      learnable && cards.length ? h('button', { class: 'btn btn-sm btn-primary', type: 'button', id: 'learn-filtered', onClick: startLearn }, Icons.get('play'), `Diese ${cards.length} ${cards.length === 1 ? 'Karte' : 'Karten'} lernen`) : null,
+      cards.length ? h('button', { class: `btn btn-sm ${Lib.selectMode ? 'btn-primary' : 'btn-quiet'}`, type: 'button', id: 'select-mode', onClick: () => { Lib.selectMode = !Lib.selectMode; Lib.selected.clear(); renderLibBody(body, folderId); } }, Lib.selectMode ? 'Fertig' : 'Auswählen') : null)));
+  if (Lib.selectMode && cards.length) sec.appendChild(bulkBar(body, folderId, cards));
+  sec.appendChild(h('div', { class: 'card-list' }, cards.slice(0, Lib.shown).map((c) => cardRow(c, {
+    showFolder: showFolder && c.folderId !== folderId,
+    selectable: Lib.selectMode, selected: Lib.selected.has(c.id),
+    onToggle: () => { Lib.selected.has(c.id) ? Lib.selected.delete(c.id) : Lib.selected.add(c.id); renderLibBody(body, folderId); },
+  }))));
+  if (cards.length > Lib.shown) sec.appendChild(h('div', { class: 'center-row' }, h('button', { class: 'btn btn-quiet', type: 'button', onClick: () => { Lib.shown += 100; renderLibBody(body, folderId); } }, `${cards.length - Lib.shown} weitere anzeigen`)));
+  return sec;
 }
 
 function renderLibBody(body, folderId) {
   clear(body);
-  if (Lib.query.trim()) {
-    const res = Store.search(Lib.query, folderId);
-    body.append(h('h2', { class: 'section-title' }, `${plural(res.length, 'Treffer', 'Treffer')}`),
-      res.length ? h('div', { class: 'card-list' }, res.slice(0, 200).map((c) => cardRow(c, { showFolder: true }))) : emptyState('search', 'Nichts gefunden', 'Probier ein anderes Stichwort.'));
+  const view = libView(folderId);
+  const active = !!Lib.query.trim() || view.filters.size > 0;
+  if (view.filters.size) {
+    body.appendChild(h('div', { class: 'active-chips' }, [...view.filters].map((f) => h('button', {
+      type: 'button', class: 'chip is-active chip-x', 'aria-label': `Filter ${STATUS_FILTERS.find(([k]) => k === f)[1]} entfernen`,
+      onClick: () => { view.filters.delete(f); Lib.repaintToolbar && Lib.repaintToolbar(); renderLibBody(body, folderId); },
+    }, STATUS_FILTERS.find(([k]) => k === f)[1], h('span', { 'aria-hidden': 'true' }, '✕')))));
+  }
+  if (active) {
+    const res = sortCards(applyFilters(libBase(folderId), view.filters), view.sort);
+    body.append(res.length
+      ? cardListSection(body, folderId, res, { title: plural(res.length, 'Treffer', 'Treffer'), showFolder: true, learnable: true })
+      : emptyState('search', 'Nichts gefunden', view.filters.size ? 'Keine Karte passt zu Suche und Filter. Entferne einen Filter oder ändere das Stichwort.' : 'Probier ein anderes Stichwort.'));
     return;
   }
   const subs = Store.childFolders(folderId);
@@ -3156,44 +3574,15 @@ function renderLibBody(body, folderId) {
         h('button', { class: 'btn', type: 'button', onClick: () => openImportDialog(null) }, Icons.get('upload'), 'Importieren'))));
     return;
   }
-  const cards = Store.cardsIn(folderId, false).sort((a, b) => b.created - a.created);
-  const visible = cards;
-  const sec = h('section', { class: 'section' });
-  const titleRow = h('div', { class: 'section-row' }, h('h2', { class: 'section-title' }, `Karten in diesem Ordner (${cards.length})`),
-    cards.length ? h('button', { class: `btn btn-sm ${Lib.selectMode ? 'btn-primary' : 'btn-quiet'}`, type: 'button', onClick: () => { Lib.selectMode = !Lib.selectMode; Lib.selected.clear(); renderLibBody(body, folderId); } }, Lib.selectMode ? 'Fertig' : 'Auswählen') : null);
-  sec.appendChild(titleRow);
+  const cards = sortCards(Store.cardsIn(folderId, false), view.sort);
   if (!cards.length) {
-    sec.appendChild(emptyState('plus', 'Noch keine Karten hier', 'Schreib deine erste Karte oder importiere einen Stapel in diesen Ordner.',
-      h('div', { class: 'btn-row center' }, h('button', { class: 'btn btn-primary', type: 'button', onClick: () => openEditor({ folderId }) }, Icons.get('plus'), 'Neue Karte'),
-        h('button', { class: 'btn', type: 'button', onClick: () => openImportDialog(folderId) }, Icons.get('upload'), 'Importieren'))));
-  } else {
-    if (Lib.selectMode) {
-      const n = Lib.selected.size;
-      sec.appendChild(h('div', { class: 'bulk-bar' },
-        h('label', { class: 'check-all' }, h('input', { type: 'checkbox', checked: n === visible.length && n > 0, onChange: (e) => { Lib.selected = new Set(e.target.checked ? visible.map((c) => c.id) : []); renderLibBody(body, folderId); } }), `${n} ausgewählt`),
-        h('button', { class: 'btn btn-sm', type: 'button', disabled: !n, onClick: async () => {
-          const r = await folderPickerDialog({ title: `${plural(n, 'Karte', 'Karten')} verschieben`, allowRoot: false, ok: 'Verschieben' });
-          if (!r) return;
-          await Store.moveCards([...Lib.selected], r.id);
-          toast(`${plural(n, 'Karte', 'Karten')} verschoben.`, 'ok'); Lib.selected.clear(); renderLibBody(body, folderId);
-        } }, Icons.get('move'), 'Verschieben'),
-        h('button', { class: 'btn btn-sm', type: 'button', disabled: !n, onClick: async () => {
-          if (!(await confirmDialog({ title: 'Fortschritt zurücksetzen?', text: `Die ${plural(n, 'Karte', 'Karten')} gelten danach wieder als neu.`, ok: 'Zurücksetzen' }))) return;
-          await Store.resetProgress([...Lib.selected]); toast('Fortschritt zurückgesetzt.', 'ok'); renderLibBody(body, folderId);
-        } }, Icons.get('undo'), 'Zurücksetzen'),
-        h('button', { class: 'btn btn-sm btn-danger', type: 'button', disabled: !n, onClick: async () => {
-          if (!(await confirmDialog({ title: 'Karten löschen?', text: `${plural(n, 'Karte wird', 'Karten werden')} endgültig gelöscht.`, ok: 'Löschen', danger: true }))) return;
-          await Store.deleteCards([...Lib.selected]); toast('Gelöscht.', 'ok'); Lib.selected.clear(); renderLibBody(body, folderId);
-        } }, Icons.get('trash'), 'Löschen')));
-    }
-    const list = h('div', { class: 'card-list' }, visible.slice(0, Lib.shown).map((c) => cardRow(c, {
-      selectable: Lib.selectMode, selected: Lib.selected.has(c.id),
-      onToggle: () => { Lib.selected.has(c.id) ? Lib.selected.delete(c.id) : Lib.selected.add(c.id); renderLibBody(body, folderId); },
-    })));
-    sec.appendChild(list);
-    if (visible.length > Lib.shown) sec.appendChild(h('div', { class: 'center-row' }, h('button', { class: 'btn btn-quiet', type: 'button', onClick: () => { Lib.shown += 100; renderLibBody(body, folderId); } }, `${visible.length - Lib.shown} weitere anzeigen`)));
+    body.append(h('section', { class: 'section' }, h('h2', { class: 'section-title' }, 'Karten in diesem Ordner (0)'),
+      emptyState('plus', 'Noch keine Karten hier', 'Schreib deine erste Karte oder importiere einen Stapel in diesen Ordner.',
+        h('div', { class: 'btn-row center' }, h('button', { class: 'btn btn-primary', type: 'button', onClick: () => openEditor({ folderId }) }, Icons.get('plus'), 'Neue Karte'),
+          h('button', { class: 'btn', type: 'button', onClick: () => openImportDialog(folderId) }, Icons.get('upload'), 'Importieren')))));
+    return;
   }
-  body.appendChild(sec);
+  body.append(cardListSection(body, folderId, cards, { title: `Karten in diesem Ordner (${cards.length})`, showFolder: false, learnable: false }));
 }
 
 /* ---------- Ordner-Aktionen ---------- */
@@ -3295,8 +3684,12 @@ async function exportDeck(folderId) {
   await shareOrDownload(IO.fileName(name, 'stapel'), JSON.stringify(data, null, 1));
 }
 async function exportBackup() {
+  const b = State.settings.backup;
+  b.last = Date.now(); b.since = b.last; b.importNudge = null;
+  await Store.saveSettings();
   const data = await IO.exportBackup();
   await shareOrDownload(IO.fileName('merkwerk', 'sicherung'), JSON.stringify(data));
+  Bus.emit('backup');
 }
 
 /* ---------- Import ---------- */
@@ -3306,20 +3699,22 @@ function openImportDialog(targetFolderId) {
   const targetLabel = h('strong', {});
   const paintTarget = () => { targetLabel.textContent = target ? Store.folderPathString(target) : 'Oberste Ebene (Ordner laut Datei)'; };
   paintTarget();
-  const fileInput = h('input', { type: 'file', accept: '.json,application/json,.txt,.csv,text/plain', class: 'visually-hidden', id: 'import-file' });
-  const fileName = h('span', { class: 'muted' }, 'Keine Datei gewählt');
-  let fileText = null;
-  const drop = h('label', { class: 'dropzone', for: 'import-file' }, Icons.get('upload'), h('span', {}, h('strong', {}, 'Datei wählen'), ' oder hierher ziehen'), fileName, fileInput);
-  const handleFile = async (file) => {
-    if (!file) return;
-    fileText = await readFileAsText(file);
-    fileName.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+  const fileInput = h('input', { type: 'file', accept: '.json,application/json,.txt,.csv,text/plain', class: 'visually-hidden', id: 'import-file', multiple: true });
+  const fileList = h('span', { class: 'muted file-list' }, 'Keine Datei gewählt');
+  let files = [];
+  const drop = h('label', { class: 'dropzone', for: 'import-file' }, Icons.get('upload'), h('span', {}, h('strong', {}, 'Dateien wählen'), ' oder hierher ziehen'), h('span', { class: 'muted small' }, 'Mehrere Dateien auf einmal möglich, z. B. alle Kapitel eines Buchs'), fileList, fileInput);
+  const handleFiles = async (list) => {
+    const arr = Array.from(list || []);
+    if (!arr.length) return;
+    files = await Promise.all(arr.map(async (f) => ({ name: f.name, size: f.size, text: await readFileAsText(f) })));
+    const kb = Math.round(files.reduce((a, f) => a + f.size, 0) / 1024);
+    fileList.textContent = files.length === 1 ? `${files[0].name} (${kb} KB)` : `${files.length} Dateien (${kb} KB): ${files.map((f) => f.name).join(', ')}`;
     drop.classList.add('has-file');
   };
-  fileInput.addEventListener('change', () => handleFile(fileInput.files[0]));
+  fileInput.addEventListener('change', () => handleFiles(fileInput.files));
   drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('is-over'); });
   drop.addEventListener('dragleave', () => drop.classList.remove('is-over'));
-  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('is-over'); handleFile(e.dataTransfer.files[0]); });
+  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('is-over'); handleFiles(e.dataTransfer.files); });
   const textArea = h('textarea', { class: 'input', rows: '8', placeholder: 'JSON einfügen – oder eine Karte pro Zeile:\nHauptstadt von Frankreich ; Paris\nmitochondrion ; Mitochondrium', 'aria-label': 'Text zum Importieren' });
   const panes = { file: h('div', { class: 'tab-pane' }, drop), text: h('div', { class: 'tab-pane', hidden: true }, textArea, h('p', { class: 'field-help' }, 'Erlaubt: das Merkwerk-JSON-Format oder einfache Zeilen „Frage ; Antwort“ (auch Tabulator oder „ :: “ als Trenner).')) };
   const tabs = h('div', { class: 'tabs', role: 'tablist' }, [['file', 'Datei'], ['text', 'Text einfügen']].map(([k, l]) => h('button', {
@@ -3330,29 +3725,37 @@ function openImportDialog(targetFolderId) {
     title: 'Karten importieren', size: 'md',
     body: h('div', { class: 'form' }, tabs, panes.file, panes.text,
       h('div', { class: 'field target-row' }, h('span', { class: 'field-label' }, 'Importieren nach'), h('div', { class: 'target-line' }, targetLabel,
-        h('button', { class: 'btn btn-sm btn-quiet', type: 'button', onClick: async () => { const r = await folderPickerDialog({ title: 'Ziel wählen', ok: 'Übernehmen' }); if (r) { target = r.root ? null : r.id; paintTarget(); } } }, 'Ändern')))),
+        h('button', { class: 'btn btn-sm btn-quiet', type: 'button', onClick: async () => { const r = await folderPickerDialog({ title: 'Ziel wählen', ok: 'Übernehmen' }); if (r) { target = r.root ? null : r.id; paintTarget(); } } }, 'Ändern'))),
+      h('p', { class: 'field-help' }, 'Karten mit gleicher Kennung (key) werden aktualisiert, dein Lernstand bleibt. Bereits vorhandene Karten ohne Kennung werden übersprungen.')),
     actions: [{ label: 'Abbrechen' }, {
       label: 'Importieren', kind: 'primary', icon: 'upload', onClick: async () => {
-        const raw = tab === 'file' ? fileText : textArea.value;
-        if (!raw || !raw.trim()) { toast(tab === 'file' ? 'Bitte wähle zuerst eine Datei.' : 'Bitte füge Text ein.', 'warn'); return false; }
-        return runImport(raw, target);
+        const list = tab === 'file' ? files : [{ name: 'Eingefügter Text', text: textArea.value }];
+        if (!list.length || !list.some((f) => f.text && f.text.trim())) { toast(tab === 'file' ? 'Bitte wähle zuerst eine Datei.' : 'Bitte füge Text ein.', 'warn'); return false; }
+        return runImport(list, target);
       },
     }],
   });
 }
 
-async function runImport(raw, target) {
-  let json;
-  const trimmed = raw.trim();
-  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-    try { json = IO.parse(trimmed); } catch (e) { toast(e.message, 'bad', { duration: 7000 }); return false; }
-  } else {
-    const { cards, errors } = IO.parseText(trimmed);
-    if (!cards.length) { toast(errors[0] || 'Keine Karten erkannt.', 'bad', { duration: 6000 }); return false; }
-    json = { cards };
-    if (!target) json.title = 'Importiert';
-  }
-  if (json.kind === 'backup') {
+function parseImportText(raw, target) {
+  const trimmed = String(raw || '').trim();
+  if (trimmed.startsWith('{') || trimmed.startsWith('[')) return IO.parse(trimmed);
+  const { cards, errors } = IO.parseText(trimmed);
+  if (!cards.length) throw new Error(errors[0] || 'Keine Karten erkannt.');
+  const json = { cards };
+  if (!target) json.title = 'Importiert';
+  return json;
+}
+
+/** list: [{ name, text }] – eine oder mehrere Dateien */
+async function runImport(list, target) {
+  if (typeof list === 'string') list = [{ name: 'Eingefügter Text', text: list }];
+  const parsed = list.map((f) => { try { return { ...f, json: parseImportText(f.text, target) }; } catch (e) { return { ...f, error: e.message }; } });
+  if (parsed.length === 1 && parsed[0].error) { toast(parsed[0].error, 'bad', { duration: 7000 }); return false; }
+  const backups = parsed.filter((p) => p.json?.kind === 'backup');
+  if (backups.length && parsed.length > 1) { toast('Eine Sicherung bitte einzeln importieren – sie ersetzt alle Daten.', 'warn', { duration: 7000 }); return false; }
+  if (backups.length) {
+    const json = backups[0].json;
     const ok = await confirmDialog({ title: 'Sicherung wiederherstellen?', danger: true, ok: 'Wiederherstellen',
       text: `Diese Datei ist eine vollständige Sicherung (${plural(json.cards.length, 'Karte', 'Karten')}, ${plural(json.folders.length, 'Ordner', 'Ordner')}). Beim Wiederherstellen werden ALLE aktuellen Daten auf diesem Gerät ersetzt.` });
     if (!ok) return false;
@@ -3362,24 +3765,79 @@ async function runImport(raw, target) {
     go('home');
     return true;
   }
-  const report = await IO.importDeck(json, target);
-  showImportReport(report);
-  if (report.cards) route();
+  const results = [];
+  for (const p of parsed) {
+    if (p.error) { results.push({ name: p.name, error: p.error }); continue; }
+    results.push({ name: p.name, report: await IO.importDeck(p.json, target) });
+  }
+  const created = results.reduce((a, r) => a + (r.report?.created || 0), 0);
+  if (created > 50) { State.settings.backup.importNudge = { ts: Date.now(), count: created }; await Store.saveSettings(); }
+  showImportReport(results);
+  route();
   return true;
 }
 
-function showImportReport(r) {
-  const ok = r.cards > 0;
+function reportLine(r) {
+  const parts = [`${fmtNum(r.created)} neu`, `${fmtNum(r.updated)} aktualisiert`];
+  if (r.unchanged) parts.push(`${fmtNum(r.unchanged)} unverändert`);
+  parts.push(`${fmtNum(r.duplicates.length + r.skipped.length)} übersprungen`);
+  if (r.missing.length) parts.push(`${fmtNum(r.missing.length)} nicht mehr in der Datei`);
+  return parts.join(' · ');
+}
+
+function showImportReport(results) {
+  if (!Array.isArray(results)) results = [{ name: 'Import', report: results }];
+  const ok = results.filter((r) => r.report);
+  const created = ok.reduce((a, r) => a + r.report.created, 0);
+  const updated = ok.reduce((a, r) => a + r.report.updated, 0);
+  const folders = ok.reduce((a, r) => a + r.report.folders, 0);
+  const anyDetails = results.some((r) => r.error || (r.report && (r.report.skipped.length || r.report.duplicates.length || r.report.missing.length || r.report.warnings.length)));
+  const fileBlocks = results.map((r) => h('div', { class: 'report-file' },
+    h('div', { class: 'report-file-name' }, Icons.get('text'), r.name),
+    r.error ? h('div', { class: 'report-file-line is-error' }, `Nicht importiert: ${r.error}`) : h('div', { class: 'report-file-line' }, reportLine(r.report))));
+  const details = h('div', { class: 'import-details', hidden: true });
+  const paintDetails = () => {
+    clear(details);
+    for (const r of results) {
+      if (!r.report) continue;
+      const R = r.report;
+      if (!(R.skipped.length || R.duplicates.length || R.missing.length || R.warnings.length)) continue;
+      const blk = h('div', { class: 'detail-file' }, results.length > 1 ? h('h3', {}, r.name) : null);
+      if (R.duplicates.length) blk.append(h('div', { class: 'dup-list' }, h('p', {}, h('strong', {}, `${plural(R.duplicates.length, 'Karte gibt', 'Karten gibt')} es schon (übersprungen):`)),
+        h('ul', {}, R.duplicates.slice(0, 50).map((d) => h('li', {}, plainText(d.text) || '(Bild)', h('span', { class: 'muted' }, ` · ${d.folder}`))))));
+      if (R.skipped.length) blk.append(h('div', { class: 'report-list' }, h('p', {}, h('strong', {}, `${plural(R.skipped.length, 'Eintrag ist', 'Einträge sind')} fehlerhaft:`)),
+        h('ul', {}, R.skipped.slice(0, 30).map((x) => h('li', {}, `Karte ${x.index}: ${x.reason}`)))));
+      if (R.warnings.length) blk.append(h('div', { class: 'report-list' }, h('ul', {}, Array.from(new Set(R.warnings)).slice(0, 10).map((w) => h('li', {}, w)))));
+      const alive = R.missing.filter((m) => State.cards.has(m.id));
+      if (alive.length) {
+        const checks = alive.map((m) => ({ m, box: h('input', { type: 'checkbox', 'aria-label': `${plainText(m.text)} löschen` }) }));
+        const delBtn = h('button', { class: 'btn btn-sm btn-danger', type: 'button', onClick: async () => {
+          const ids = checks.filter((c) => c.box.checked).map((c) => c.m.id);
+          if (!ids.length) { toast('Wähle zuerst die Karten aus, die weg sollen.', 'warn'); return; }
+          const snap = Store.snapshot(ids);
+          await Store.deleteCards(ids);
+          undoToast(`${plural(snap.cards.length, 'Karte', 'Karten')} gelöscht.`, snap, () => { paintDetails(); route(); });
+          paintDetails(); route();
+        } }, Icons.get('trash'), 'Ausgewählte löschen');
+        blk.append(h('div', { class: 'missing-list' },
+          h('p', {}, h('strong', {}, `${plural(alive.length, 'Karte ist', 'Karten sind')} nicht mehr in der Datei`), h('span', { class: 'muted small' }, ' – sie bleiben erhalten, außer du hakst sie hier ab.')),
+          h('div', { class: 'missing-rows' }, checks.map(({ m, box }) => h('label', { class: 'check' }, box, h('span', {}, plainText(m.text) || '(Bild)', h('span', { class: 'muted' }, ` · ${m.folder}`))))),
+          delBtn));
+      }
+      details.appendChild(blk);
+    }
+  };
+  paintDetails();
+  const toggle = anyDetails ? h('button', { class: 'btn btn-sm btn-quiet', type: 'button', id: 'import-details-btn', onClick: () => { details.hidden = !details.hidden; toggle.lastChild.textContent = details.hidden ? 'Details' : 'Details ausblenden'; } }, Icons.get('info'), h('span', {}, 'Details')) : null;
+  const headline = created ? `${plural(created, 'Karte', 'Karten')} importiert` : updated ? 'Keine neuen Karten' : 'Es wurde keine Karte importiert.';
   Modal.open({
-    title: ok ? 'Import abgeschlossen' : 'Nichts importiert', size: 'md',
+    title: created || updated ? 'Import abgeschlossen' : 'Nichts importiert', size: 'md',
     body: h('div', {},
-      h('p', { class: 'report-big' }, ok ? `${plural(r.cards, 'Karte', 'Karten')} importiert` : 'Es konnte keine Karte importiert werden.', r.folders ? h('span', { class: 'muted' }, ` · ${plural(r.folders, 'neuer Ordner', 'neue Ordner')}`) : null),
-      r.skipped.length ? h('div', { class: 'report-list' }, h('p', {}, h('strong', {}, `${plural(r.skipped.length, 'Eintrag wurde', 'Einträge wurden')} übersprungen:`)),
-        h('ul', {}, r.skipped.slice(0, 30).map((s) => h('li', {}, `Karte ${s.index}: ${s.reason}`)))) : null,
-      r.warnings.length ? h('div', { class: 'report-list' }, h('ul', {}, Array.from(new Set(r.warnings)).slice(0, 10).map((w) => h('li', {}, w)))) : null),
+      h('p', { class: 'report-big' }, headline, updated ? h('span', { class: 'muted' }, ` · ${fmtNum(updated)} aktualisiert`) : null, folders ? h('span', { class: 'muted' }, ` · ${plural(folders, 'neuer Ordner', 'neue Ordner')}`) : null),
+      h('div', { class: 'report-files' }, fileBlocks), toggle, details),
     actions: [{ label: 'OK', kind: 'primary' }],
   });
-  if (ok) Sound.good();
+  if (created || updated) Sound.good();
 }
 
 async function loadDemoDeck() {
@@ -3691,11 +4149,11 @@ function openEditor({ cardId = null, folderId = null, type = null, onSaved = nul
     }
     try {
       if (editing) {
-        await Store.updateCard(editing.id, drafts[curType]);
+        await Store.updateCard(editing.id, drafts[curType], { source: sourceInput.value });
         if (editing.folderId !== target) await Store.moveCards([editing.id], target);
         toast('Karte gespeichert.', 'ok');
       } else {
-        const created = await Store.createCards(curType, target, drafts[curType]);
+        const created = await Store.createCards(curType, target, drafts[curType], { source: sourceInput.value });
         toast(created.length > 1 ? `${created.length} Karten erstellt.` : 'Karte erstellt.', 'ok');
       }
     } catch (e) { toast(e.message, 'warn', { duration: 5000 }); return false; }
@@ -3711,12 +4169,15 @@ function openEditor({ cardId = null, folderId = null, type = null, onSaved = nul
     return true;
   };
 
+  const sourceInput = h('input', { class: 'input', type: 'text', id: 'ed-source', placeholder: 'Kap. 3.2, S. 42', value: editing?.source || '', 'aria-label': 'Quelle' });
   paintTypes(); paintFolder(); render();
   const body = h('div', { class: 'editor' },
     editing ? null : typePicker,
     h('div', { class: 'target-line' }, Icons.get('folder'), folderLabel,
       h('button', { class: 'btn btn-sm btn-quiet', type: 'button', onClick: async () => { const r = await folderPickerDialog({ title: 'Ordner wählen', allowRoot: false, ok: 'Übernehmen', current: target }); if (r) { target = r.id; paintFolder(); } } }, 'Ändern')),
     formHost,
+    h('label', { class: 'field source-field' }, h('span', { class: 'field-label' }, 'Quelle (optional)'), sourceInput,
+      h('span', { class: 'field-help' }, 'Wo steht das im Buch? Erscheint beim Lernen klein unter der Antwort und ist über die Suche auffindbar.')),
     h('p', { class: 'muted small format-help' }, 'Formatieren: **fett**, *kursiv*, ==markiert==, Formeln mit $a^2+b^2=c^2$ oder $$\\frac{a}{b}$$'),
     preview);
   const modal = Modal.open({
@@ -3752,8 +4213,8 @@ const Study = {
   active: false,
   s: null, // aktuelle Sitzung
 
-  start({ folderId = null, mode = 'learn' }) {
-    const pool = Store.cardsIn(folderId);
+  start({ folderId = null, mode = 'learn', cardIds = null, label = null }) {
+    const pool = cardIds ? cardIds.map((id) => State.cards.get(id)).filter(Boolean) : Store.cardsIn(folderId);
     if (!pool.length) { toast('In diesem Ordner sind noch keine Karten.', 'warn'); return false; }
     const s = {
       mode, folderId, pool, queue: [], learnQ: [], current: null, ctl: null, result: null, shownAt: 0,
@@ -3780,7 +4241,8 @@ const Study = {
       }
       s.total = s.queue.length + s.learnQ.length;
     } else if (mode === 'cram') {
-      s.queue = shuffle(pool).slice(0, 60).map((c) => c.id);
+      s.queue = (cardIds ? shuffle(pool) : shuffle(pool).slice(0, 60)).map((c) => c.id);
+      s.label = label;
       s.total = s.queue.length;
     } else if (mode === 'challenge') {
       s.queue = shuffle(pool).map((c) => c.id);
@@ -3810,7 +4272,7 @@ const Study = {
     const s = this.s;
     const main = $('#main');
     clear(main);
-    const modeName = { learn: 'Lernrunde', cram: 'Freies Üben', challenge: 'Zeit-Challenge', boss: 'Bossangriff' }[s.mode];
+    const modeName = s.label || { learn: 'Lernrunde', cram: 'Freies Üben', challenge: 'Zeit-Challenge', boss: 'Bossangriff' }[s.mode];
     this.el = {};
     const E = this.el;
     E.progress = h('div', { class: 'study-progress', role: 'progressbar', 'aria-label': 'Fortschritt' }, h('div', { class: 'study-progress-fill' }));
@@ -3951,7 +4413,7 @@ const Study = {
     if (!s.result) {
       if (ctl.needsReveal) {
         E.actions.append(h('button', { class: 'btn btn-primary btn-xl reveal-btn', type: 'button', onClick: () => ctl.reveal() }, Icons.get('flip'), 'Umdrehen',
-          !isTouch() ? h('kbd', {}, 'Leertaste') : null));
+          !isTouch() ? h('kbd', {}, Keys.label('flip')) : null));
         if (isTouch()) E.actions.append(h('p', { class: 'muted small center' }, 'Tippe auf die Karte zum Umdrehen'));
       }
       return;
@@ -3962,19 +4424,19 @@ const Study = {
       const bar = h('div', { class: 'rating-bar', role: 'group', 'aria-label': 'Wie gut wusstest du es?' }, [1, 2, 3, 4].map((g) => h('button', {
         class: `rate-btn ${RATINGS[g].cls} ${sug === g ? 'is-suggested' : ''}`, type: 'button', onClick: () => this.rate(g),
       }, h('span', { class: 'rate-label' }, RATINGS[g].label), h('span', { class: 'rate-ivl' }, formatInterval(prev[g])),
-        !isTouch() ? h('kbd', {}, RATINGS[g].key) : null)));
+        !isTouch() ? h('kbd', {}, Keys.label('rate', g)) : null)));
       E.actions.append(bar,
         h('p', { class: 'muted small center rate-hint' }, isTouch() ? 'Wischen: rechts = gewusst · links = nochmal · hoch = schwer'
-          : sug ? `Enter übernimmt den Vorschlag „${RATINGS[sug].label}“ · Pfeile: → gut, ← nochmal, ↑ schwer` : 'Enter = Gut · Pfeile: → gut, ← nochmal, ↑ schwer'));
+          : `${sug ? `Enter übernimmt den Vorschlag „${RATINGS[sug].label}“` : 'Enter = Gut'} · Wischen: ${Keys.label('right')} gut, ${Keys.label('left')} nochmal, ${Keys.label('up')} schwer`));
     } else if (s.mode === 'cram') {
       E.actions.append(h('div', { class: 'rating-bar two' },
-        h('button', { class: 'rate-btn r-again', type: 'button', onClick: () => this.rate(1) }, h('span', { class: 'rate-label' }, 'Nochmal'), h('span', { class: 'rate-ivl' }, 'kommt gleich wieder'), !isTouch() ? h('kbd', {}, '←') : null),
-        h('button', { class: `rate-btn r-good ${s.result.suggested !== 1 ? 'is-suggested' : ''}`, type: 'button', onClick: () => this.rate(3) }, h('span', { class: 'rate-label' }, 'Gewusst'), h('span', { class: 'rate-ivl' }, 'abhaken'), !isTouch() ? h('kbd', {}, '→') : null)));
+        h('button', { class: 'rate-btn r-again', type: 'button', onClick: () => this.rate(1) }, h('span', { class: 'rate-label' }, 'Nochmal'), h('span', { class: 'rate-ivl' }, 'kommt gleich wieder'), !isTouch() ? h('kbd', {}, Keys.label('left')) : null),
+        h('button', { class: `rate-btn r-good ${s.result.suggested !== 1 ? 'is-suggested' : ''}`, type: 'button', onClick: () => this.rate(3) }, h('span', { class: 'rate-label' }, 'Gewusst'), h('span', { class: 'rate-ivl' }, 'abhaken'), !isTouch() ? h('kbd', {}, Keys.label('right')) : null)));
     } else {
       if (s.result.correct == null) {
         E.actions.append(h('div', { class: 'rating-bar two' },
-          h('button', { class: 'rate-btn r-again', type: 'button', onClick: () => this.rate(1) }, h('span', { class: 'rate-label' }, 'Nicht gewusst'), !isTouch() ? h('kbd', {}, '←') : null),
-          h('button', { class: 'rate-btn r-good is-suggested', type: 'button', onClick: () => this.rate(3) }, h('span', { class: 'rate-label' }, 'Gewusst'), !isTouch() ? h('kbd', {}, '→') : null)));
+          h('button', { class: 'rate-btn r-again', type: 'button', onClick: () => this.rate(1) }, h('span', { class: 'rate-label' }, 'Nicht gewusst'), !isTouch() ? h('kbd', {}, Keys.label('left')) : null),
+          h('button', { class: 'rate-btn r-good is-suggested', type: 'button', onClick: () => this.rate(3) }, h('span', { class: 'rate-label' }, 'Gewusst'), !isTouch() ? h('kbd', {}, Keys.label('right')) : null)));
       } else {
         E.actions.append(h('button', { class: 'btn btn-primary btn-xl', type: 'button', id: 'next-btn', onClick: () => this.rate(s.result.correct ? 3 : 1) }, 'Weiter', !isTouch() ? h('kbd', {}, 'Enter') : null));
       }
@@ -3985,6 +4447,8 @@ const Study = {
     const s = this.s;
     if (!s || s.result) return;
     s.result = result;
+    const src = State.cards.get(s.current.id)?.source;
+    if (src) this.el.card.appendChild(h('div', { class: 'card-source' }, Icons.get('book'), src));
     if (result.correct === true) { this.el.card.classList.add('is-ok'); Sound.good(); }
     else if (result.correct === false) { this.el.card.classList.add('is-bad', 'shake'); Sound.bad(); }
     else Sound.flip();
@@ -4217,17 +4681,17 @@ const Study = {
       if (s.ctl.onKey(e)) { e.preventDefault(); return; }
     }
     if (isTyping(e)) return;
-    const k = e.key;
-    if (k.toLowerCase() === 'z' && s.mode === 'learn') { e.preventDefault(); this.undo(); return; }
-    if (k.toLowerCase() === 's' && !e.ctrlKey) { e.preventDefault(); this.speak(); return; }
-    if (k.toLowerCase() === 'e' && s.mode !== 'challenge') { e.preventDefault(); this.edit(); return; }
-    if (k.toLowerCase() === 'h') { const hb = $('.hint-btn', this.el.card); if (hb) { e.preventDefault(); hb.click(); } return; }
+    const k = Keys.norm(e);
+    if (k === 'z' && s.mode === 'learn') { e.preventDefault(); this.undo(); return; }
+    if (Keys.isSpeak(e) && !e.ctrlKey) { e.preventDefault(); this.speak(); return; }
+    if (k === 'e' && s.mode !== 'challenge') { e.preventDefault(); this.edit(); return; }
+    if (k === 'h') { const hb = $('.hint-btn', this.el.card); if (hb) { e.preventDefault(); hb.click(); } return; }
     if (!s.result) return;
-    if (s.mode === 'learn' && /^[1-4]$/.test(k)) { e.preventDefault(); this.rate(Number(k)); return; }
-    if (k === 'ArrowRight') { e.preventDefault(); this.swipe('right'); return; }
-    if (k === 'ArrowLeft') { e.preventDefault(); this.swipe('left'); return; }
-    if (k === 'ArrowUp' && s.mode === 'learn') { e.preventDefault(); this.swipe('up'); return; }
-    if (k === 'Enter' || k === ' ') {
+    const g = Keys.rating(e);
+    if (s.mode === 'learn' && g) { e.preventDefault(); this.rate(g); return; }
+    const dir = Keys.dir(e);
+    if (dir === 'right' || dir === 'left' || (dir === 'up' && s.mode === 'learn')) { e.preventDefault(); this.swipe(dir); return; }
+    if (Keys.isFlip(e)) {
       e.preventDefault();
       if (s.mode === 'learn') this.rate(s.result.suggested || 3);
       else if (s.mode === 'cram') this.rate(s.result.suggested === 1 ? 1 : 3);
@@ -4564,12 +5028,11 @@ function renderSettings(main) {
     } catch (e) { storageInfo.textContent = ''; }
   })();
 
-  const shortcuts = [
-    ['Leertaste', 'Karte umdrehen'], ['1 · 2 · 3 · 4', 'Nochmal · Schwer · Gut · Leicht'], ['→ / ← / ↑', 'wischen: gewusst / nochmal / schwer'],
-    ['Enter', 'prüfen bzw. Vorschlag übernehmen'], ['1–9', 'Multiple Choice: Antwort wählen'], ['1–8 + A–H', 'Zuordnen'],
-    ['← / →', 'Wahr oder falsch'], ['Zahl, dann ↑/↓', 'Reihenfolge verschieben'], ['H', 'Tipp zeigen'], ['S', 'Vorlesen'], ['E', 'Karte bearbeiten'], ['Z', 'Bewertung rückgängig'], ['Esc', 'Lernrunde beenden'],
-    ['L', 'Startseite: Lernrunde starten'], ['N', 'Ordner: neue Karte'], ['/', 'Ordner: suchen'], ['Strg + Enter', 'Editor: speichern'],
-  ];
+  const shortcuts = Keys.shortcutList();
+  const presetPick = h('div', { class: 'preset-pick', role: 'radiogroup', 'aria-label': 'Tastenbelegung' }, Object.entries(KEY_PRESETS).map(([k, p]) => h('button', {
+    type: 'button', role: 'radio', 'aria-checked': String(Keys.id() === k), class: `preset-opt ${Keys.id() === k ? 'is-selected' : ''}`, dataset: { preset: k },
+    onClick: async () => { await save({ keyPreset: k }); toast(`Tastenbelegung „${p.name}“ aktiv.`, 'ok'); renderSettings(main); },
+  }, h('strong', {}, p.name), h('span', { class: 'muted small' }, p.desc))));
 
   main.append(
     h('header', { class: 'page-head' }, h('div', {}, h('h1', {}, 'Einstellungen'))),
@@ -4587,7 +5050,7 @@ function renderSettings(main) {
       settingRow('Vorlese-Sprache', 'Standard für alle Ordner. Pro Ordner änderbar (Ordner bearbeiten).', ttsSel)),
     h('section', { class: 'panel settings-group' }, h('h2', { class: 'section-title' }, 'Daten & Sicherung'),
       h('p', { class: 'muted small' }, 'Deine Daten liegen nur auf diesem Gerät, in diesem Browser. Um sie aufs Handy oder den PC zu übertragen, exportiere eine Sicherung und importiere sie auf dem anderen Gerät.'),
-      settingRow('Sicherung exportieren', 'Alle Ordner, Karten, Bilder, dein Lernfortschritt und Erfolge in einer Datei.', h('button', { class: 'btn', type: 'button', onClick: exportBackup }, Icons.get('download'), 'Sicherung speichern')),
+      settingRow('Sicherung exportieren', `Alle Ordner, Karten, Bilder, dein Lernfortschritt und Erfolge in einer Datei. ${State.settings.backup.last ? `Letzte Sicherung: ${new Date(State.settings.backup.last).toLocaleDateString('de-AT')}.` : 'Noch keine Sicherung erstellt.'}`, h('button', { class: 'btn', type: 'button', onClick: exportBackup }, Icons.get('download'), 'Sicherung speichern')),
       settingRow('Sicherung oder Stapel importieren', 'Eine Sicherung ersetzt alle Daten. Ein Stapel wird hinzugefügt.', h('button', { class: 'btn', type: 'button', onClick: () => openImportDialog(null) }, Icons.get('upload'), 'Datei importieren')),
       settingRow('Speicher', State.persistent ? 'Gespeichert in IndexedDB.' : 'Achtung: Dieser Browser erlaubt keinen dauerhaften Speicher. Daten gehen beim Schließen verloren – bitte regelmäßig exportieren.', storageInfo),
       settingRow('Alle Daten löschen', 'Entfernt alle Ordner, Karten und deinen Fortschritt von diesem Gerät.', h('button', { class: 'btn btn-danger', type: 'button', onClick: async () => {
@@ -4595,6 +5058,8 @@ function renderSettings(main) {
         await Store.wipeAll(); toast('Alle Daten gelöscht.', 'ok'); go('home');
       } }, Icons.get('trash'), 'Alles löschen'))),
     h('section', { class: 'panel settings-group' }, h('h2', { class: 'section-title' }, 'Tastatur & Gesten'),
+      h('p', { class: 'muted small' }, 'Wähle eine Vorlage. Ziffern 1–4 und die Pfeiltasten funktionieren zusätzlich immer. In Eingabefeldern gelten die Kürzel nicht.'),
+      presetPick,
       h('div', { class: 'shortcut-grid' }, shortcuts.map(([k, d]) => h('div', { class: 'shortcut' }, h('kbd', {}, k), h('span', {}, d)))),
       h('p', { class: 'muted small' }, 'Am Handy: Tippe auf die Karte zum Umdrehen. Danach nach rechts wischen = gewusst, nach links = nochmal, nach oben = schwer. Bei Wahr/Falsch: rechts = wahr, links = falsch.')),
     h('section', { class: 'panel settings-group' }, h('h2', { class: 'section-title' }, 'App'),
@@ -5055,7 +5520,7 @@ function renderHero(main, tab) {
 function renderHeroMain(body) {
   const d = RPG.d, ch = d.char, st = RPG.stats(), li = Gami.levelInfo();
   const free = RPG.pointsFree();
-  const charCard = h('section', { class: 'panel hero-card' },
+  const charCard = h('section', { class: 'panel hero-char-card' },
     heroEl(200),
     h('div', { class: 'hero-id' },
       h('h2', {}, ch.name),
@@ -5449,7 +5914,7 @@ function showWelcome(force = false) {
     ['folder', 'Ordner & Karten', 'Sortiere deine Karten in Ordner und Unterordner. 8 Kartentypen sorgen für Abwechslung – von klassisch bis Bildbereiche abdecken.'],
     ['calendar', 'Clever wiederholen', 'Der FSRS-Algorithmus plant jede Karte genau dann ein, kurz bevor du sie vergessen würdest. Mit Prüfungsdatum sitzt alles rechtzeitig.'],
     ['zap', 'Spielerisch dranbleiben', 'Sammle XP, halte deine Serie und erschaffe einen Helden: Jede richtige Antwort trifft einen Fantasy-Boss, der Truhen mit Gold und Ausrüstung hinterlässt.'],
-    ['keyboard', 'PC & Handy', isTouch() ? 'Tippe zum Umdrehen und wische: rechts = gewusst, links = nochmal, hoch = schwer.' : 'Leertaste dreht um, 1–4 bewertet, Pfeiltasten wischen. Am Handy wischst du mit dem Finger.'],
+    ['keyboard', 'PC & Handy', isTouch() ? 'Tippe zum Umdrehen und wische: rechts = gewusst, links = nochmal, hoch = schwer.' : `${Keys.label('flip')} dreht um, ${[1, 2, 3, 4].map((g) => Keys.label('rate', g)).join(' ')} bewertet, ${Keys.label('left')} / ${Keys.label('right')} / ${Keys.label('up')} wischen. Andere Tastenbelegungen findest du in den Einstellungen.`],
   ];
   Modal.open({
     title: 'Willkommen bei Merkwerk', size: 'md', className: 'welcome',
@@ -5487,6 +5952,7 @@ async function init() {
     const li = Gami.levelInfo();
     setTimeout(() => { toast(`Level ${lvl} erreicht – ${li.title}!${RPG.hasHero() ? ' +2 Fähigkeitspunkte für deinen Helden.' : ''}`, 'xp', { duration: 5000 }); Fx.confetti(140); Sound.level(); }, 300);
   });
+  Bus.on('backup', () => { if ((location.hash.replace(/^#\/?/, '') || 'home').startsWith('home')) route(); });
   Bus.on('installable', () => { if (location.hash.startsWith('#/settings')) route(); });
   if (location.hash.startsWith('#/study')) history.replaceState(null, '', '#/home');
   route();
