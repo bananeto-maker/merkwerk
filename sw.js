@@ -1,5 +1,5 @@
 /* Merkwerk Service Worker: speichert die App für die Offline-Nutzung. */
-const CACHE = 'merkwerk-1.3.0';
+const CACHE = 'merkwerk-1.5.0';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {
