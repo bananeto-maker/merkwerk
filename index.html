@@ -39,6 +39,7 @@
 
   /* Clean: Karteikarte – Tintenblau, Rotstift-Linie, hellblaue Lineatur */
   --bg: #EDF1F6;
+  --bar: #FFFFFF; /* 1.7: Farbe der Handy-Leisten (oben/unten) */
   --bg-2: #E3E9F1;
   --surface: #FFFFFF;
   --surface-2: #F5F7FB;
@@ -64,6 +65,7 @@
 :root[data-theme="gaming"] {
   /* Gaming: dunkel, ruhig, eine gedämpfte violette Akzentfarbe */
   --bg: #0D0A14;
+  --bar: #110D19;
   --bg-2: #14101D;
   --surface: #17121F;
   --surface-2: #211B2D;
@@ -89,9 +91,13 @@
 
 /* ============ Grundlagen ============ */
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; touch-action: manipulation; background: var(--bg); }
-/* 1.3: Der ganze Fensterhintergrund (auch unter der Navigationsleiste und am unteren Rand) folgt dem Design */
-html, body { background-color: var(--bg); }
+/* 1.7: Der Fensterhintergrund (das, was Android am unteren Rand unter bzw. neben der Gestenleiste zeigt)
+   hat die Leistenfarbe des Designs: Clean Weiß, Gaming Dunkelviolett. Die Seite selbst bleibt wie bisher. */
+html { -webkit-text-size-adjust: 100%; touch-action: manipulation; background: var(--bar); }
+html, body { background-color: var(--bar); }
+body { background-color: var(--bg); }
+/* Lernmodus (ohne Navigationsleiste): Streifen hinter der Android-Gestenleiste in Leistenfarbe */
+body.is-studying::after { content: ""; position: fixed; left: 0; right: 0; bottom: 0; height: env(safe-area-inset-bottom, 0px); background: var(--bar); z-index: 30; pointer-events: none; }
 body {
   margin: 0; font-family: var(--font); font-size: 16px; line-height: 1.5; color: var(--ink); background: var(--bg);
   -webkit-font-smoothing: antialiased; min-height: 100vh; min-height: 100dvh; overflow-x: hidden;
@@ -970,6 +976,9 @@ body:has(.overlay:not(.is-closing)) .toasts { bottom: auto; top: 16px; }
 .card-origin + .card-type { margin-left: auto; padding-left: 8px; color: var(--ink-3); font-weight: 600; }
 @media (max-width: 520px) { .card-origin + .card-type .card-type-label { display: none; } }
 
+/* 1.6: Abfragerichtung einer Vokabel in der Kartenkopfzeile */
+.card-dir { flex: none; margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: .74rem; font-weight: 700; letter-spacing: .02em; white-space: nowrap; }
+
 /* ============ Fantasy-RPG ============ */
 :root { --r-common: #7C8699; --r-rare: #2F7FEA; --r-epic: #8B4FE0; --r-legendary: #E08E0B; --gold: #C98A0A; --gold-soft: #FBF0D4; }
 .r-common { --rc: var(--r-common); } .r-rare { --rc: var(--r-rare); } .r-epic { --rc: var(--r-epic); } .r-legendary { --rc: var(--r-legendary); }
@@ -1178,7 +1187,7 @@ body:has(.overlay:not(.is-closing)) .toasts { bottom: auto; top: 16px; }
 /* ---- 00-util.js ---- */
 'use strict';
 /* Allgemeine Hilfsfunktionen */
-const APP_VERSION = '1.5.0';
+const APP_VERSION = '1.7.0';
 const MIN = 60e3, HOUR = 36e5, DAY = 864e5;
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -1849,7 +1858,7 @@ const Store = {
     const err = def.validate(data);
     if (err) throw new Error(err);
     const now = Date.now();
-    const base = { folderId, type, created: now, updated: now, leech: false, tags: opts.tags || [], source: String(opts.source || '').trim(), key: opts.key ? String(opts.key) : null };
+    const base = { folderId, type, created: now, updated: now, leech: false, tags: opts.tags || [], source: String(opts.source || '').trim(), key: opts.key ? String(opts.key) : null, ...(opts.reverseOf ? { reverseOf: opts.reverseOf } : {}) };
     const out = [];
     if (type === 'occlusion') {
       const groupId = uid();
@@ -1858,7 +1867,7 @@ const Store = {
       const { reverse, ...rest } = data;
       out.push({ ...base, id: uid(), data: rest, srs: opts.srs || FSRS.newState() });
       if (type === 'basic' && reverse) {
-        out.push({ ...base, key: base.key ? `${base.key}~r` : null, id: uid(), data: { front: rest.back, back: rest.front, frontImage: rest.backImage || null, backImage: rest.frontImage || null, hint: '', note: rest.note || '', kind: rest.kind || '', distractors: [] }, srs: FSRS.newState(), reverseOf: out[0].id });
+        out.push({ ...base, key: base.key ? `${base.key}~r` : null, id: uid(), data: { front: rest.back, back: rest.front, frontImage: rest.backImage || null, backImage: rest.frontImage || null, hint: '', note: rest.note || '', kind: rest.kind || '', distractors: [], dir: flipDir(rest.dir), lang: rest.lang || '' }, srs: FSRS.newState(), reverseOf: out[0].id });
       }
     }
     out.forEach((c) => State.cards.set(c.id, c));
@@ -1910,6 +1919,8 @@ const Store = {
     return State.cards.get(id) || null;
   },
   groupOf(card) {
+    // seit 1.6: die beiden Richtungen einer Vokabel gehören zusammen (Löschen, Verschieben, Rückgängig)
+    if (card.type === 'basic') { const p = kindOf(card) === 'vokabel' ? pairPartner(card) : null; return p ? [card, p] : [card]; }
     if (card.type !== 'occlusion' || !card.groupId) return [card];
     return Array.from(State.cards.values()).filter((c) => c.groupId === card.groupId);
   },
@@ -1952,17 +1963,55 @@ const Store = {
   },
   /** Art (Vokabel/Grammatik/Sonstiges) für klassische Karten setzen; andere Kartentypen bleiben unverändert */
   async setKind(ids, kind) {
-    const changed = [];
+    const changed = [], seen = new Set();
     for (const id of ids) {
-      const c = State.cards.get(id);
-      if (!c || c.type !== 'basic') continue;
-      c.data = { ...c.data, kind: normKind(kind) };
-      c.updated = Date.now();
-      changed.push(c);
+      const c0 = State.cards.get(id);
+      if (!c0 || c0.type !== 'basic') continue;
+      // die Gegenrichtung einer Umkehrkarte bekommt dieselbe Art
+      for (const c of [c0, pairPartner(c0)]) {
+        if (!c || seen.has(c.id)) continue;
+        seen.add(c.id);
+        c.data = { ...c.data, kind: normKind(kind) };
+        c.updated = Date.now();
+        changed.push(c);
+      }
     }
     await DB.putMany('cards', changed);
     Bus.emit('data');
     return changed.length;
+  },
+  /** „Richtung tauschen“: bei Vokabeln festlegen, dass die jeweils andere Seite die Fremdsprache ist (Inhalt und Lernstand bleiben) */
+  async swapDir(ids) {
+    const changed = [], seen = new Set();
+    for (const id of ids) {
+      const c = State.cards.get(id);
+      if (!c || c.type !== 'basic' || seen.has(c.id) || kindOf(c) !== 'vokabel') continue;
+      const p = pairPartner(c);
+      const nd = flipDir(dirOf(c) || 'de');   // unklar verhält sich wie Deutsch → Fremdsprache (Eintippen), Tauschen macht die Karte zu Fremdsprache → Deutsch
+      c.data = { ...c.data, kind: 'vokabel', dir: nd }; c.updated = Date.now(); changed.push(c); seen.add(c.id);
+      if (p) { p.data = { ...p.data, kind: 'vokabel', dir: flipDir(nd) }; p.updated = Date.now(); changed.push(p); seen.add(p.id); }
+    }
+    await DB.putMany('cards', changed);
+    Bus.emit('data');
+    return changed.length;
+  },
+  /** Nach dem Bearbeiten einer Vokabel: Gegenrichtung anlegen, angleichen oder (Schalter aus) entfernen. Lernstand bleibt. */
+  async syncVocabPair(id, both) {
+    const c = State.cards.get(id);
+    if (!c || c.type !== 'basic' || c.data.kind !== 'vokabel') return;
+    const p = pairPartner(c);
+    if (!c.data.dir) { c.data = { ...c.data, dir: dirOf(c) || 'fw' }; await DB.put('cards', c); }
+    if (!both) {
+      if (p) { State.cards.delete(p.id); await DB.delMany('cards', [p.id]); await this.gcMedia(); }
+    } else if (p) {
+      p.data = partnerData(c.data, p); p.folderId = c.folderId; p.updated = Date.now();
+      if (p.leech) { p.leech = false; p.leechCleared = p.srs.lapses; }
+      await DB.put('cards', p);
+    } else {
+      const key = c.key ? (/~r$/.test(c.key) ? c.key.slice(0, -2) : `${c.key}~r`) : null;
+      await this.createCards('basic', c.folderId, partnerData(c.data, null), { silent: true, key, source: c.source, tags: c.tags, reverseOf: c.id });
+    }
+    Bus.emit('data');
   },
   async moveCards(ids, folderId) {
     const changed = [];
@@ -2216,6 +2265,9 @@ const CardTypes = {
       frontImage: r.frontImage || r.image || null, backImage: r.backImage || null,
       hint: str(r.hint), note: str(r.note), reverse: !!r.reverse,
       kind: normKind(r.kind),
+      // seit 1.6: Richtung einer Vokabel ('fw' = Fremdwort vorne) und Sprache der fremden Seite
+      dir: normDir(r.dir) || (str(r.lang).trim() && normKind(r.kind) === 'vokabel' ? 'fw' : ''),
+      lang: str(r.lang).trim(),
       distractors: cleanDistractors(r.distractors ?? r.wrong, r.back ?? r.answer),
     }),
     validate: (d) => (!d.front && !d.frontImage ? 'Die Vorderseite braucht Text oder ein Bild.' : !d.back && !d.backImage ? 'Die Rückseite braucht Text oder ein Bild.' : null),
@@ -2717,7 +2769,7 @@ const TYPE_ORDER = ['basic', 'typing', 'mc', 'match', 'cloze', 'truefalse', 'ord
 const KINDS = ['vokabel', 'grammatik', 'sonstiges'];
 const KIND_LABEL = { vokabel: 'Vokabel', grammatik: 'Grammatik', sonstiges: 'Sonstiges' };
 const KIND_HELP = {
-  vokabel: 'Nie Multiple Choice, dafür jedes 2. Mal zum Eintippen.',
+  vokabel: 'Nie Multiple Choice. Fremdsprache → Deutsch: umdrehen; Deutsch → Fremdsprache: jedes 2. Mal eintippen.',
   grammatik: 'Multiple Choice nur mit deinen eigenen falschen Antworten.',
   sonstiges: 'Manchmal Eintippen oder Multiple Choice, bei Zahlen mit veränderten Ergebnissen.',
 };
@@ -2763,9 +2815,7 @@ function suggestKind(folderId, front, back) {
   return folderId && Store.folderHasLang(folderId) && isShortAnswer(back) && !isQuestion(front) ? 'vokabel' : 'sonstiges';
 }
 function hasReverse(card) {
-  if (card.reverseOf || (card.key && /~r$/.test(card.key))) return true;
-  for (const c of State.cards.values()) if (c.reverseOf === card.id) return true;
-  return false;
+  return !!pairPartner(card);
 }
 /** Schätzung für Karten ohne gespeicherte Art (alte Stapel, alte Karten) */
 function guessKind(card) {
@@ -2997,7 +3047,8 @@ function presentAs(card, pool, ctx = {}) {
 
   if (kind === 'vokabel') {
     // nie Multiple Choice; abwechselnd klassisch und eintippen (über die Wiederholungen, beim freien Üben über einen Zähler)
-    if (hasMath) return card;
+    // seit 1.6: Fremdsprache → Deutsch immer klassisch; Deutsch → Fremdsprache (oder Richtung unklar) jedes 2. Mal eintippen
+    if (hasMath || dirOf(card) === 'fw') return card;
     let n = card.srs.reps || 0;
     if (ctx.mode === 'cram') { const k = VocabCounter.get(card.id) || 0; VocabCounter.set(card.id, k + 1); n += k; }
     if (n % 2 === 0) return card;
@@ -3034,6 +3085,93 @@ function presentAs(card, pool, ctx = {}) {
   return card;
 }
 
+/* ---- 05c-vocab.js ---- */
+/* Vokabeln in beide Richtungen (seit 1.6):
+   Richtung einer Vokabelkarte (dir): 'fw' = Fremdsprache → Deutsch (vorne das Fremdwort), 'de' = Deutsch → Fremdsprache.
+   Zwei Karten einer Vokabel sind über reverseOf bzw. key/key~r verknüpft und haben getrennten Lernstand. */
+const flipDir = (d) => (d === 'fw' ? 'de' : d === 'de' ? 'fw' : '');
+
+/** "fw", "fremd", "foreign" … → 'fw'; "de", "deutsch", "native" … → 'de'; sonst '' */
+function normDir(v) {
+  const s = String(v ?? '').trim().toLowerCase();
+  if (!s) return '';
+  if (/^(fw|fd|fremd|foreign|fs|f2d|l2)/.test(s)) return 'fw';
+  if (/^(de|df|deutsch|german|native|d2f|l1)/.test(s)) return 'de';
+  return '';
+}
+
+/** Verknüpfte Gegenrichtung einer klassischen Karte (über reverseOf oder key / key~r) */
+const Pairs = {
+  dirty: true, size: -1, byRev: new Map(), byKey: new Map(),
+  index() {
+    if (!this.dirty && this.size === State.cards.size) return;
+    this.byRev = new Map(); this.byKey = new Map();
+    for (const c of State.cards.values()) {
+      if (c.type !== 'basic') continue;
+      if (c.reverseOf) this.byRev.set(c.reverseOf, c.id);
+      if (c.key) this.byKey.set(c.key, c.id);
+    }
+    this.dirty = false; this.size = State.cards.size;
+  },
+};
+Bus.on('data', () => { Pairs.dirty = true; });
+
+function pairPartner(card) {
+  if (!card || card.type !== 'basic') return null;
+  Pairs.index();
+  const get = (id) => { const c = id && State.cards.get(id); return c && c.id !== card.id && c.type === 'basic' ? c : null; };
+  let p = get(card.reverseOf) || get(Pairs.byRev.get(card.id));
+  if (!p && card.key) p = get(Pairs.byKey.get(/~r$/.test(card.key) ? card.key.slice(0, -2) : `${card.key}~r`));
+  return p;
+}
+
+/* Welche Seite ist Deutsch? Umlaute/ß, häufige deutsche Wörter, großgeschriebene Nomen vs. englische Funktionswörter */
+const DE_WORDS = new Set('der die das den dem des ein eine einen einem einer eines und oder nicht sich zu mit von auf für ist sind sein haben werden wird kein keine etwas jemand jemandem jemanden jmd jmdm jmdn man es er sie wir ihr ich du im am zum zur beim vom aus bei nach über unter vor hinter zwischen auch sehr ganz'.split(' '));
+const EN_WORDS = new Set('the a an to of and or not is are be have has with for on in at by from it he she we you they someone something sb sth one oneself very'.split(' '));
+function germanScore(text) {
+  const t = plainText(String(text || '')).replace(/\([^)]*\)/g, (m) => m.slice(1, -1));
+  let s = 0;
+  if (/[äöüÄÖÜß]/.test(t)) s += 2;
+  const words = t.split(/[^A-Za-zÄÖÜäöüßéèêàâçñóíúá'-]+/).filter(Boolean);
+  for (const w of words) {
+    const lw = w.toLowerCase();
+    if (DE_WORDS.has(lw)) s += 1;
+    if (EN_WORDS.has(lw)) s -= 1;
+    if (/(ung|keit|heit|schaft|lich|isch)$/.test(lw) && lw.length > 5) s += 1;
+    if (/^[A-ZÄÖÜ][a-zäöüß]/.test(w) && w !== 'I') s += 0.5;
+  }
+  return s;
+}
+/** Richtung aus dem Inhalt schätzen; null, wenn nicht sicher erkennbar */
+function guessDir(front, back) {
+  const diff = germanScore(back) - germanScore(front);
+  if (diff >= 0.5) return 'fw';
+  if (diff <= -0.5) return 'de';
+  return null;
+}
+/** Richtung einer Vokabelkarte: gespeichert, sonst Gegenstück der Partnerkarte, sonst geschätzt (oder null) */
+function dirOf(card) {
+  if (!card || card.type !== 'basic' || kindOf(card) !== 'vokabel') return null;
+  if (card.data.dir) return card.data.dir;
+  const p = pairPartner(card);
+  if (p && p.data.dir) return flipDir(p.data.dir);
+  return guessDir(card.data.front, card.data.back);
+}
+/** Kurzbezeichnung der Richtung für die Kartenkopfzeile, z. B. „EN → DE“ */
+function dirLabel(card) {
+  const d = dirOf(card);
+  if (!d || !pairPartner(card)) return '';   // nur bei Vokabeln, die in beide Richtungen abgefragt werden
+  const lang = (card.data.lang || Store.folderPath(card.folderId).reverse().find((f) => f.lang)?.lang || '').split('-')[0].toUpperCase();
+  const fw = lang && lang !== 'DE' ? lang : 'Fremdsprache';
+  const de = lang && lang !== 'DE' ? 'DE' : 'Deutsch';
+  return d === 'fw' ? `${fw} → ${de}` : `${de} → ${fw}`;
+}
+/** Daten der Gegenrichtung aus den Daten einer Vokabelkarte */
+function partnerData(d, oldPartner) {
+  return { front: d.back, back: d.front, frontImage: d.backImage || null, backImage: d.frontImage || null,
+    hint: oldPartner?.data.hint || '', note: d.note || '', kind: 'vokabel', distractors: [], dir: flipDir(d.dir), lang: d.lang || '' };
+}
+
 /* ---- 06-io.js ---- */
 /* Import & Export: Kartenstapel (ohne Fortschritt) und vollständige Sicherung (mit Fortschritt) */
 const FORMAT = 'merkwerk';
@@ -3057,7 +3195,14 @@ const IO = {
       }
       const data = deepClone(c.data);
       if (c.type === 'occlusion') delete data.target;
-      if (c.type === 'basic') { if (!data.kind) delete data.kind; if (!data.distractors?.length) delete data.distractors; }
+      if (c.type === 'basic') {
+        if (!data.kind) delete data.kind;
+        if (!data.distractors?.length) delete data.distractors;
+        // seit 1.6: Vokabeln tragen ihre Richtung, damit importierte Stapel schon richtig gekennzeichnet sind
+        const dir = data.dir || dirOf(c);
+        if (dir) data.dir = dir; else delete data.dir;
+        if (!data.lang) delete data.lang;
+      }
       collectMediaRefs(data, { add: (id) => { if (State.media.has(id)) media[id] = State.media.get(id); } });
       cards.push({ type: c.type, folder: relPath(c.folderId), ...data, ...(c.tags?.length ? { tags: c.tags } : {}), ...(c.key ? { key: c.key } : {}), ...(c.source ? { source: c.source } : {}) });
     }
@@ -3097,6 +3242,8 @@ const IO = {
   stable(data) {
     const { target, reverse, ...rest } = data || {};
     if (!rest.kind) delete rest.kind;
+    if (!rest.dir) delete rest.dir;
+    if (!rest.lang) delete rest.lang;
     if (Array.isArray(rest.distractors) && !rest.distractors.length) delete rest.distractors;
     const sortKeys = (v) => (Array.isArray(v) ? v.map(sortKeys) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, sortKeys(v[k])])) : v);
     return JSON.stringify(sortKeys(rest));
@@ -3174,10 +3321,10 @@ const IO = {
             const r = await this.updateExisting(existing, type, data, source, opts);
             report[r]++;
             if (type === 'basic' && data.reverse) {
-              const rev = { front: data.back, back: data.front, frontImage: data.backImage || null, backImage: data.frontImage || null, hint: '', note: data.note || '', kind: data.kind || '' };
+              const rev = { front: data.back, back: data.front, frontImage: data.backImage || null, backImage: data.frontImage || null, hint: '', note: data.note || '', kind: data.kind || '', dir: flipDir(data.dir), lang: data.lang || '' };
               const exRev = Store.findByKey(`${key}~r`);
               if (exRev) report[await this.updateExisting(exRev, 'basic', rev, source, opts)]++;
-              else { await Store.createCards('basic', existing.folderId, rev, { ...opts, key: `${key}~r` }); report.created++; }
+              else { await Store.createCards('basic', existing.folderId, rev, { ...opts, key: `${key}~r`, reverseOf: existing.id }); report.created++; }
             }
             continue;
           }
@@ -3223,6 +3370,7 @@ const IO = {
     if (type === 'basic' && existing.type === 'basic') {
       data = { ...data };
       if (!data.kind && existing.data.kind) data.kind = existing.data.kind;
+      if (!data.dir && existing.data.dir) data.dir = existing.data.dir;
       if (!data.distractors?.length && existing.data.distractors?.length) data.distractors = existing.data.distractors;
     }
     const sameData = existing.type === type && this.stable(existing.data) === this.stable(data);
@@ -3354,6 +3502,7 @@ const Icons = (() => {
     home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
     folder: '<path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H9l2 2.2h7.5A2.5 2.5 0 0 1 21 8.7v8.8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/>',
     folderPlus: '<path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H9l2 2.2h7.5A2.5 2.5 0 0 1 21 8.7v8.8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/><path d="M12 10v6M9 13h6"/>',
+    swap: '<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',
     tag: '<path d="M3 12V4.5A1.5 1.5 0 0 1 4.5 3H12l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.3"/>',
     chart: '<path d="M3 20h18M6.5 16v-5M11.5 16V6M16.5 16v-8"/>',
     trophy: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11"/>',
@@ -4149,11 +4298,19 @@ function bulkBar(body, folderId, visible) {
       if (!nBasic) { toast('Die Art gibt es nur bei klassischen Karten.', 'info'); return; }
       const kind = await kindDialog(n, nBasic);
       if (!kind) return;
-      const snap = Store.snapshot(ids);
+      const snap = Store.snapshot([...ids, ...ids.map((id) => pairPartner(State.cards.get(id))?.id).filter(Boolean)]);
       const done = await Store.setKind(ids, kind);
       undoToast(`${plural(done, 'Karte', 'Karten')}: Art „${KIND_LABEL[kind]}“.`, snap, () => route());
       rerender();
     } }, Icons.get('tag'), 'Art festlegen'),
+    h('button', { class: 'btn btn-sm', type: 'button', id: 'bulk-dir', disabled: !n, title: 'Bei Vokabeln festlegen, welche Seite die Fremdsprache ist', onClick: async () => {
+      const ids = [...Lib.selected].filter((id) => kindOf(State.cards.get(id)) === 'vokabel');
+      if (!ids.length) { toast('„Richtung tauschen“ gibt es nur bei Vokabeln.', 'info'); return; }
+      const snap = Store.snapshot(ids);
+      const done = await Store.swapDir(ids);
+      undoToast(`Richtung bei ${plural(done, 'Karte', 'Karten')} getauscht – die andere Seite gilt jetzt als Fremdsprache.`, snap, () => route());
+      rerender();
+    } }, Icons.get('swap'), 'Richtung tauschen'),
     h('button', { class: 'btn btn-sm', type: 'button', disabled: !n, onClick: async () => {
       const snap = Store.snapshot([...Lib.selected]);
       await Store.resetProgress([...Lib.selected]);
@@ -4610,7 +4767,7 @@ const EditorCtx = { folderId: null };
 const draftKind = (d) => d.kind || suggestKind(EditorCtx.folderId, d.front, d.back);
 
 /** Auswahl „Art der Karte“ plus Feld „Typische falsche Antworten“ (seit 1.5) */
-function kindSection(d) {
+function kindSection(d, onChange) {
   const picker = h('div', { class: 'kind-picker', role: 'radiogroup', 'aria-label': 'Art der Karte', id: 'ed-kind' });
   const help = h('span', { class: 'field-help', id: 'ed-kind-help' });
   if (!Array.isArray(d.distractors)) d.distractors = [];
@@ -4627,32 +4784,59 @@ function kindSection(d) {
     clear(picker);
     KINDS.forEach((k) => picker.appendChild(h('button', {
       type: 'button', class: `kind-opt ${k === cur ? 'is-selected' : ''}`, role: 'radio', 'aria-checked': String(k === cur), 'data-kind': k,
-      onClick: () => { d.kind = k; d._kindAuto = false; paint(); },
+      onClick: () => { const was = draftKind(d); d.kind = k; d._kindAuto = false; if (onChange && (was === 'vokabel') !== (k === 'vokabel')) onChange(); else paint(); },
     }, KIND_LABEL[k])));
+    paintHooks.forEach((fn) => fn(cur));
     help.textContent = KIND_HELP[cur] + (d._kindAuto && !d.kind ? ' (Vorschlag)' : '');
     wrong.hidden = cur === 'vokabel';
     wrongHelp.textContent = cur === 'grammatik'
       ? 'Nur mit diesen Antworten wird die Karte als Multiple Choice gestellt.'
       : 'Werden bei Multiple Choice zuerst verwendet, vor veränderten Zahlen und Antworten anderer Karten.';
   };
-  paint();
-  return { paint, els: [h('div', { class: 'field kind-field' }, h('span', { class: 'field-label' }, 'Art der Karte'), picker, help), wrong] };
+  const paintHooks = [];
+  return { paint, onPaint: (fn) => { paintHooks.push(fn); }, els: [h('div', { class: 'field kind-field' }, h('span', { class: 'field-label' }, 'Art der Karte'), picker, help), wrong] };
 }
 
 const EditorForms = {
   basic(d, rerender, isNew) {
-    const kind = kindSection(d);
+    const kind = kindSection(d, () => rerender());
+    // seit 1.6: Vokabeln mit den Feldern „Fremdsprache“ und „Deutsch“; bei der Richtung Deutsch → Fremdsprache ist die Fremdsprache hinten
+    const swapped = !isNew && d.dir === 'de' && draftKind(d) === 'vokabel';
+    const frontLbl = h('span', { class: 'field-label', id: 'ed-front-label' });
+    const backLbl = h('span', { class: 'field-label', id: 'ed-back-label' });
+    const frontTa = textArea(d.front, (v) => { d.front = v; if (d._kindAuto) kind.paint(); }, { placeholder: 'Frage oder Begriff', rows: 2, id: 'ed-main' });
+    const backTa = textArea(d.back, (v) => { d.back = v; if (d._kindAuto) kind.paint(); }, { placeholder: 'Antwort', rows: 3, id: 'ed-back' });
+    const frontField = h('div', { class: 'field' }, frontLbl, frontTa);
+    const backField = h('div', { class: 'field' }, backLbl, backTa);
+    const revBox = h('input', { type: 'checkbox', id: 'ed-both', checked: isNew ? d.reverse : !!d._both,
+      onChange: (e) => { if (isNew) { d.reverse = e.target.checked; d._revTouched = true; } else d._both = e.target.checked; } });
+    const revText = h('span', {});
+    const revLine = h('label', { class: 'check', id: 'ed-both-line' }, revBox, revText);
+    kind.onPaint((cur) => {
+      const voc = cur === 'vokabel';
+      const fwSide = swapped ? backLbl : frontLbl, deSide = swapped ? frontLbl : backLbl;
+      fwSide.textContent = voc ? 'Fremdsprache' : swapped ? 'Rückseite' : 'Vorderseite';
+      deSide.textContent = voc ? 'Deutsch' : swapped ? 'Vorderseite' : 'Rückseite';
+      (swapped ? backTa : frontTa).placeholder = voc ? 'Wort in der Fremdsprache, z. B. sustainable' : swapped ? 'Antwort' : 'Frage oder Begriff';
+      (swapped ? frontTa : backTa).placeholder = voc ? 'Bedeutung auf Deutsch, z. B. nachhaltig' : swapped ? 'Frage oder Begriff' : 'Antwort';
+      if (isNew && voc && !d._revTouched && !d.reverse) { d.reverse = true; revBox.checked = true; }
+      if (isNew && !voc && !d._revTouched && d.reverse) { d.reverse = false; revBox.checked = false; }
+      revText.textContent = voc ? 'In beide Richtungen abfragen (Fremdsprache → Deutsch und Deutsch → Fremdsprache, getrennter Lernstand)'
+        : 'Auch umgekehrt abfragen (erstellt eine zweite Karte)';
+      revLine.hidden = !isNew && !voc;
+    });
+    kind.paint();
     return [
       kind.els[0],
-      field('Vorderseite', textArea(d.front, (v) => { d.front = v; if (d._kindAuto) kind.paint(); }, { placeholder: 'Frage oder Begriff', rows: 2, id: 'ed-main' })),
+      swapped ? backField : frontField,
       imageField(() => d.frontImage, (v) => { d.frontImage = v; }, 'Bild vorne'),
-      field('Rückseite', textArea(d.back, (v) => { d.back = v; if (d._kindAuto) kind.paint(); }, { placeholder: 'Antwort', rows: 3 })),
+      swapped ? frontField : backField,
       kind.els[1],
       imageField(() => d.backImage, (v) => { d.backImage = v; }, 'Bild hinten'),
       h('details', { class: 'more-fields', open: !!(d.hint || d.note) }, h('summary', {}, 'Tipp & Eselsbrücke'),
         field('Tipp (wird erst auf Wunsch gezeigt)', textInput(d.hint, (v) => { d.hint = v; }, { placeholder: 'optional' })),
         field('Eselsbrücke / Notiz (nach dem Umdrehen)', textArea(d.note, (v) => { d.note = v; }, { placeholder: 'optional', rows: 2 }))),
-      isNew ? h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: d.reverse, onChange: (e) => { d.reverse = e.target.checked; } }), 'Auch umgekehrt abfragen (erstellt eine zweite Karte)') : null,
+      revLine,
     ];
   },
   typing(d) {
@@ -4828,7 +5012,11 @@ function openEditor({ cardId = null, folderId = null, type = null, onSaved = nul
     return d;
   };
   drafts[curType] = editing ? deepClone({ ...editing.data, ...(editing.type === 'occlusion' ? {} : {}) }) : freshDraft(curType);
-  if (editing && editing.type === 'basic' && !drafts.basic.kind) drafts.basic.kind = kindOf(editing);
+  if (editing && editing.type === 'basic') {
+    if (!drafts.basic.kind) drafts.basic.kind = kindOf(editing);
+    if (drafts.basic.kind === 'vokabel' && !drafts.basic.dir) drafts.basic.dir = dirOf(editing) || 'fw';
+    drafts.basic._both = !!pairPartner(editing);
+  }
   EditorCtx.folderId = target;
   if (editing && editing.type === 'occlusion') delete drafts[curType].target;
 
@@ -4894,11 +5082,13 @@ function openEditor({ cardId = null, folderId = null, type = null, onSaved = nul
       const d = drafts.basic;
       if (!d._kindAuto && d.kind && !editing) { State.settings.folderKinds = { ...(State.settings.folderKinds || {}), [target]: d.kind }; Store.saveSettings(); }
       if (!d.kind) d.kind = draftKind(d);
+      if (d.kind === 'vokabel' && !d.dir) d.dir = 'fw';   // neue Vokabel: vorne steht die Fremdsprache
     }
     try {
       if (editing) {
         await Store.updateCard(editing.id, drafts[curType], { source: sourceInput.value });
         if (editing.folderId !== target) await Store.moveCards([editing.id], target);
+        if (curType === 'basic' && drafts.basic.kind === 'vokabel') await Store.syncVocabPair(editing.id, !!drafts.basic._both);
         toast('Karte gespeichert.', 'ok');
       } else {
         const created = await Store.createCards(curType, target, drafts[curType], { source: sourceInput.value });
@@ -4940,7 +5130,8 @@ function openEditor({ cardId = null, folderId = null, type = null, onSaved = nul
     actions: [
       editing ? { label: 'Löschen', kind: 'danger-quiet', icon: 'trash', onClick: async () => {
         const group = Store.groupOf(editing);
-        const ok = await confirmDialog({ title: 'Karte löschen?', danger: true, ok: 'Löschen', text: group.length > 1 ? `Diese Bildkarte gehört zu einer Gruppe mit ${group.length} Bereichen – alle werden gelöscht.` : 'Die Karte und ihr Lernfortschritt werden endgültig gelöscht.' });
+        const ok = await confirmDialog({ title: 'Karte löschen?', danger: true, ok: 'Löschen', text: group.length > 1 && editing.type === 'basic' ? 'Diese Vokabel wird in beide Richtungen abgefragt – beide Karten und ihr Lernfortschritt werden gelöscht.'
+          : group.length > 1 ? `Diese Bildkarte gehört zu einer Gruppe mit ${group.length} Bereichen – alle werden gelöscht.` : 'Die Karte und ihr Lernfortschritt werden endgültig gelöscht.' });
         if (!ok) return false;
         await Store.deleteCards([editing.id]); toast('Karte gelöscht.', 'ok'); onSaved && onSaved(); if (!Study.active) route(); return true;
       } } : null,
@@ -5145,6 +5336,7 @@ const Study = {
     const def = CardTypes[card.shownType || card.type];
     const tag = h('div', { class: 'card-tag' }, cardOrigin(card.folderId),
       h('span', { class: 'card-type', title: def.label }, Icons.get(def.icon), h('span', { class: 'card-type-label' }, def.label)),
+      (() => { const lbl = dirLabel(State.cards.get(card.id)); return lbl ? h('span', { class: 'card-dir', title: 'Abfragerichtung der Vokabel' }, lbl) : null; })(),
       card.leech ? h('span', { class: 'leech-tag' }, 'Problemkarte') : null,
       card.srs.state === 'new' && s.mode === 'learn' ? h('span', { class: 'new-tag' }, 'Neu') : null);
     const ctl = def.study(card, { done: (r) => this.onDone(r), mode: s.mode });
@@ -5215,15 +5407,10 @@ const Study = {
     const s = this.s;
     if (!s || s.result) return;
     s.result = result;
-    // Quelle und key (bzw. ID) der Originalkarte – auch wenn sie gerade als Multiple Choice/Eintippen abgefragt wurde
+    // 1.7: Beim Lernen nur noch die Quelle – key bzw. Karten-ID stehen im Editor (Karte im Ordner öffnen oder „E“)
     const orig = State.cards.get(s.current.id);
     const src = orig?.source;
-    const ref = s.current.id === 'preview' ? null : cardRef(orig);
-    if (src || ref) this.el.card.appendChild(h('div', { class: 'card-meta' },
-      src ? h('div', { class: 'card-source' }, Icons.get('book'), src) : null,
-      ref ? h('button', { class: 'card-ref', type: 'button', title: 'Antippen kopiert', 'aria-label': `${ref.label} kopieren`,
-        onClick: async (e) => { e.stopPropagation(); const ok = await copyText(ref.value); toast(ok ? `${ref.kind === 'key' ? 'key' : 'ID'} kopiert: ${ref.value}` : 'Kopieren nicht möglich – bitte abschreiben.', 'ok', { duration: 2500 }); } },
-        Icons.get('copy'), ref.label) : null));
+    if (src) this.el.card.appendChild(h('div', { class: 'card-meta' }, h('div', { class: 'card-source' }, Icons.get('book'), src)));
     if (result.correct === true) { this.el.card.classList.add('is-ok'); Sound.good(); }
     else if (result.correct === false) { this.el.card.classList.add('is-bad', 'shake'); Sound.bad(); }
     else Sound.flip();
@@ -5893,15 +6080,13 @@ function applyTheme() {
     mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
   }
 }
-/** 1.4: Status- und Navigationsleiste von Android in der Farbe der App: auf normalen Seiten wie die untere
- *  Navigationsleiste (Clean Weiß, Gaming Dunkelviolett), im Lernmodus wie der Hintergrund des Lernbildschirms. */
+/** 1.4/1.7: Status- und Navigationsleiste von Android in der Farbe der App – immer wie die untere
+ *  Navigationsleiste (Clean Weiß, Gaming Dunkelviolett), auch im Lernmodus (dort früher hellblau). */
 function syncBarColor() {
   const meta = $('meta[name="theme-color"]');
   if (!meta) return;
-  const nav = $('.nav');
-  const studying = document.body.classList.contains('is-studying');
-  const src = !studying && nav ? nav : document.body;
-  const hex = cssColorToHex(getComputedStyle(src).backgroundColor) || (State.settings.theme === 'gaming' ? '#110D19' : '#FFFFFF');
+  const bar = getComputedStyle(document.documentElement).getPropertyValue('--bar').trim().toUpperCase();
+  const hex = /^#[0-9A-F]{6}$/.test(bar) ? bar : (document.documentElement.getAttribute('data-theme') === 'gaming' ? '#110D19' : '#FFFFFF');
   if (meta.getAttribute('content') !== hex) meta.setAttribute('content', hex);
 }
 function cssColorToHex(c) {
@@ -6898,7 +7083,7 @@ async function init() {
       });
     }).catch(() => { /* Offline-Modus nicht verfügbar, App funktioniert trotzdem */ });
   }
-  window.Merkwerk = { State, Store, IO, FSRS, Study, CardTypes, DB, RPG, NumDistractors, presentAs, kindOf, version: APP_VERSION };
+  window.Merkwerk = { State, Store, IO, FSRS, Study, CardTypes, DB, RPG, NumDistractors, presentAs, kindOf, dirOf, pairPartner, guessDir, version: APP_VERSION };
 }
 
 init().catch((e) => {
