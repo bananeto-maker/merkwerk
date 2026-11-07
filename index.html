@@ -339,6 +339,10 @@ body:has(.overlay:not(.is-closing)) .toasts { bottom: auto; top: 16px; }
 .picker-count { flex: none; min-width: 28px; padding: 2px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-size: .8rem; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
 .picker-count.is-zero { background: var(--surface-2); color: var(--ink-3); }
 
+/* seit 1.8: im Lernen-Tab des Dashboards ohne eigene Navigation */
+.im-dashboard .nav { display: none; }
+.im-dashboard .main { margin-left: 0; max-width: none; }
+
 /* ============ Heute ============ */
 .home-head { align-items: center; }
 .head-chips { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
@@ -1187,7 +1191,7 @@ body:has(.overlay:not(.is-closing)) .toasts { bottom: auto; top: 16px; }
 /* ---- 00-util.js ---- */
 'use strict';
 /* Allgemeine Hilfsfunktionen */
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.8.0';
 const MIN = 60e3, HOUR = 36e5, DAY = 864e5;
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -1411,6 +1415,7 @@ const DB = {
   async open() {
     if (this.db) return true;
     if (this.mem) return false;
+    if (DASHBOARD_MODUS) { this.mem = Object.fromEntries(this.STORES.map((s) => [s, new Map()])); return false; }
     try {
       if (!('indexedDB' in window)) throw new Error('kein IndexedDB');
       this.db = await new Promise((res, rej) => {
@@ -1681,6 +1686,8 @@ const DEFAULT_SETTINGS = {
   collapsedTree: [],   // eingeklappte Ordner im Ordner-Auswahlfenster
   collapsedGroups: [], // eingeklappte Ordnergruppen in Such- und Filtertreffern
   folderKinds: {},     // zuletzt gewählte Kartenart je Ordner (Editor)
+  geraet: 'handy',     // seit 1.8: Name dieses Geräts im Lernverlauf (verlauf-handy.json)
+  verlaufExport: null, // seit 1.8: Zeitpunkt des letzten Lernverlauf-Exports
 };
 const DEFAULT_PROFILE = {
   xp: 0, streak: 0, bestStreak: 0, freezes: 0, lastGoalDay: null, frozenDays: [],
@@ -1720,6 +1727,7 @@ const Store = {
     State.profile = mergeProfile(metaMap.profile);
     DAY_START_HOUR = State.settings.dayStartHour;
     Gami.checkStreakOnLoad();
+    await Verlauf.migrieren();
   },
   async saveSettings() { DAY_START_HOUR = State.settings.dayStartHour; await DB.put('meta', { key: 'settings', value: State.settings }); },
   async saveProfile() { await DB.put('meta', { key: 'profile', value: State.profile }); },
@@ -1870,7 +1878,8 @@ const Store = {
         out.push({ ...base, key: base.key ? `${base.key}~r` : null, id: uid(), data: { front: rest.back, back: rest.front, frontImage: rest.backImage || null, backImage: rest.frontImage || null, hint: '', note: rest.note || '', kind: rest.kind || '', distractors: [], dir: flipDir(rest.dir), lang: rest.lang || '' }, srs: FSRS.newState(), reverseOf: out[0].id });
       }
     }
-    out.forEach((c) => State.cards.set(c.id, c));
+    // seit 1.8: feste ID, die beim erneuten Import gleich bleibt
+    out.forEach((c) => { c.sid = Verlauf.sidFor(c, opts.sid ? (c.reverseOf && !opts.reverseOf ? `${opts.sid}~r` : opts.sid) : null); State.cards.set(c.id, c); });
     await DB.putMany('cards', out);
     if (!opts.silent) {
       State.profile.totals.created += out.length;
@@ -2067,9 +2076,10 @@ const Store = {
     let becameLeech = false;
     const lapsesSince = n.lapses - (card.leechCleared || 0);
     if (rating === 1 && !card.leech && lapsesSince >= State.settings.leechThreshold) { card.leech = true; becameLeech = true; }
-    const log = { id: uid(), cardId, ts: now, rating, ms: info.ms || 0, type: info.shownType || card.type, state: before.state, folderId: card.folderId };
+    const log = { id: uid(), cardId, ts: now, rating, ms: info.ms || 0, type: info.shownType || card.type, state: before.state, folderId: card.folderId, sid: card.sid, geraet: Verlauf.geraet() };
     await DB.put('cards', card);
     await DB.put('logs', log);
+    Dashboard.senden({ typ: 'eintrag', eintrag: Verlauf.eintrag(log) });
     const stats = todayStats(true);
     stats.reviews++;
     if (rating >= 2) stats.correct++;
@@ -2096,6 +2106,7 @@ const Store = {
     State.profile = undo.profileBefore;
     await DB.put('cards', card);
     await DB.del('logs', undo.logId);
+    Dashboard.senden({ typ: 'rueckgaengig', id: undo.logId });
     await this.saveProfile();
     Bus.emit('profile');
   },
@@ -3334,7 +3345,7 @@ const IO = {
           report.duplicates.push({ index: i + 1, text: CardTypes[type].summary(data)[0], folder: Store.folderPathString(folderId) });
           continue;
         }
-        const created = await Store.createCards(type, folderId, data, opts);
+        const created = await Store.createCards(type, folderId, data, key ? opts : { ...opts, sid: Verlauf.sidOhneKey(folderId, sig) });
         sigsOf(folderId).add(sig);
         report.created += created.length;
       } catch (e) {
@@ -3352,6 +3363,7 @@ const IO = {
         report.missing.push({ id: c.id, text: CardTypes[c.type].summary(c.data)[0], folder: Store.folderPathString(c.folderId) });
       }
     }
+    report.restored = await Verlauf.nachImport();
     report.cards = report.created;
     report.folders = State.folders.size - folderCountBefore;
     if (report.created || report.updated) {
@@ -5339,6 +5351,7 @@ const Study = {
       (() => { const lbl = dirLabel(State.cards.get(card.id)); return lbl ? h('span', { class: 'card-dir', title: 'Abfragerichtung der Vokabel' }, lbl) : null; })(),
       card.leech ? h('span', { class: 'leech-tag' }, 'Problemkarte') : null,
       card.srs.state === 'new' && s.mode === 'learn' ? h('span', { class: 'new-tag' }, 'Neu') : null);
+    Dashboard.senden({ typ: 'karte', karte: State.cards.get(card.id)?.sid || null, ordner: Store.folderPathString(card.folderId) });
     const ctl = def.study(card, { done: (r) => this.onDone(r), mode: s.mode });
     s.ctl = ctl;
     E.card.append(tag, ctl.el);
@@ -5760,6 +5773,7 @@ const Study = {
     this.active = false;
     document.body.classList.remove('is-studying');
     window.speechSynthesis?.cancel?.();
+    if (!Dashboard.wechsel) Dashboard.senden({ typ: 'fertig' });
     if (location.hash.startsWith('#/study')) history.back(); else route();
   },
 };
@@ -6004,6 +6018,7 @@ const BookStats = {
 
 const Badges = {
   evaluate(ctx = {}) {
+    if (DASHBOARD_MODUS) return; // seit 1.8: im Dashboard startet Merkwerk jedes Mal frisch – keine Abzeichen
     const got = State.profile.badges;
     BookStats.reset();
     const fresh = BADGES.filter((b) => !got[b.id] && (() => { try { return b.test(ctx); } catch (e) { return false; } })());
@@ -6163,6 +6178,22 @@ function renderSettings(main) {
         if (!(await confirmDialog({ title: 'Wirklich alles löschen?', text: 'Alle Ordner, Karten, Bilder und dein Lernfortschritt werden von diesem Gerät entfernt. Das kann nicht rückgängig gemacht werden.', ok: 'Alles löschen', danger: true }))) return;
         await Store.wipeAll(); toast('Alle Daten gelöscht.', 'ok'); go('home');
       } }, Icons.get('trash'), 'Alles löschen'))),
+    h('section', { class: 'panel settings-group', id: 'lernverlauf' }, h('h2', { class: 'section-title' }, 'Lernverlauf fürs Dashboard'),
+      h('p', { class: 'muted small' }, 'Exportiert alle Wiederholungen dieses Geräts in eine Datei. Speichere sie in deinem Cloud-Ordner im Datenordner des Dashboards unter „lernen“. Beim Einlesen werden vorhandene Einträge übersprungen – nichts wird doppelt gezählt.'),
+      settingRow('Gerätename', 'Steht im Dateinamen, z. B. verlauf-handy.json. Nutzt du zwei Handys, gib jedem einen eigenen Namen (z. B. „handy-2“).', (() => {
+        const inp = h('input', { class: 'input', value: S.geraet || 'handy', 'aria-label': 'Gerätename', maxlength: 24 });
+        inp.addEventListener('change', () => { const v = inp.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '') || 'handy'; inp.value = v; save({ geraet: v }); });
+        return inp;
+      })()),
+      settingRow('Lernverlauf exportieren', S.verlaufExport ? `Zuletzt exportiert: ${new Date(S.verlaufExport).toLocaleString('de-AT', { dateStyle: 'short', timeStyle: 'short' })}.` : 'Noch nie exportiert.', h('button', { class: 'btn', type: 'button', onClick: async () => { await Verlauf.exportieren(); renderSettings(main); } }, Icons.get('download'), 'Exportieren')),
+      settingRow('Lernverlauf einlesen', 'Verlauf eines anderen Geräts übernehmen (z. B. verlauf-pc.json vom Dashboard). Der Lernstand der betroffenen Karten wird daraus neu berechnet.', h('button', { class: 'btn', type: 'button', onClick: async () => {
+        const f = await pickFile('.json,.txt,application/json,text/plain');
+        if (!f) return;
+        try {
+          const r = await Verlauf.einlesen(JSON.parse(String(await readFileAsText(f)).replace(/^﻿/, '')));
+          toast(`${plural(r.neu, 'neue Wiederholung', 'neue Wiederholungen')} übernommen, ${r.doppelt} schon vorhanden${r.fehlerhaft ? `, ${r.fehlerhaft} fehlerhaft übersprungen` : ''}.`, 'ok', { duration: 6000 });
+        } catch (e) { toast(e instanceof SyntaxError ? 'Die Datei ist kein gültiges JSON.' : e.message, 'warn', { duration: 7000 }); }
+      } }, Icons.get('upload'), 'Einlesen'))),
     h('section', { class: 'panel settings-group' }, h('h2', { class: 'section-title' }, 'Tastatur & Gesten'),
       h('p', { class: 'muted small' }, 'Wähle eine Vorlage. Ziffern 1–4 und die Pfeiltasten funktionieren zusätzlich immer. In Eingabefeldern gelten die Kürzel nicht.'),
       presetPick,
@@ -6925,6 +6956,217 @@ function openHeroEditor() {
   });
 }
 
+/* ---- 18-verlauf.js ---- */
+/* Neu in 1.8: Lernverlauf fürs Dashboard
+ * – feste Karten-IDs (sid), die beim erneuten Import gleich bleiben: der key der Karte
+ *   (Umkehrkarte key~r, Bildbereich key#Bereich); ohne key aus Ordner + Frage + Antwort bzw. aus der Karten-ID
+ * – Export des Lernverlaufs als Datei pro Gerät, Einlesen ohne Doppelte (Schlüssel = Eintrags-ID)
+ * – Dashboard-Modus (?dashboard): Merkwerk läuft im Lernen-Tab des Dashboards, Karten und Verlauf kommen vom Dashboard */
+const VERLAUF_FORMAT = 'merkwerk-lernverlauf';
+const DASHBOARD_MODUS = new URLSearchParams(location.search).has('dashboard');
+/** Kartentypen, bei denen die Antwort frei erinnert wird (zählen fürs Dashboard mehr als Auswahl-Aufgaben) */
+const FREIE_TYPEN = new Set(['basic', 'typing', 'cloze', 'occlusion']);
+
+/** Kurzer, stabiler Fingerabdruck (FNV-1a, zweimal 32 Bit) */
+function fingerabdruck(text) {
+  let a = 0x811c9dc5, b = 0x01000193 ^ 0x9e3779b9;
+  for (let i = 0; i < text.length; i++) {
+    const c = text.charCodeAt(i);
+    a = Math.imul(a ^ c, 0x01000193) >>> 0;
+    b = Math.imul(b ^ c, 0x01000193 ^ 0x5bd1e995) >>> 0;
+  }
+  return a.toString(36) + b.toString(36);
+}
+
+const Verlauf = {
+  /** Feste ID einer Karte */
+  sidFor(card, basis = null) {
+    const grund = basis || card.key;
+    if (grund) return card.type === 'occlusion' && card.data?.target ? `${grund}#${card.data.target}` : grund;
+    return `mw-${card.id}`;
+  },
+  /** Für Karten ohne key aus einem Stapel: gleiche Karte im gleichen Ordner → gleiche ID */
+  sidOhneKey(folderId, signatur) {
+    return `sig-${fingerabdruck(`${Store.folderPathString(folderId)}|${signatur}`)}`;
+  },
+
+  /** Einmalig nach dem Laden: ältere Karten und Wiederholungen bekommen ihre feste ID. */
+  async migrieren() {
+    const karten = [];
+    for (const c of State.cards.values()) if (!c.sid) { c.sid = this.sidFor(c); karten.push(c); }
+    await DB.putMany('cards', karten);
+    const logs = (await DB.getAll('logs')).filter((l) => !l.sid);
+    const neu = [];
+    for (const l of logs) { const c = State.cards.get(l.cardId); if (c) { l.sid = c.sid; neu.push(l); } }
+    await DB.putMany('logs', neu);
+  },
+
+  geraet() { return State.settings.geraet || 'handy'; },
+
+  /** Wiederholung im Austauschformat */
+  eintrag(l) {
+    const art = l.type || 'basic';
+    return {
+      id: l.id, karte: l.sid || `mw-${l.cardId}`, zeit: new Date(l.ts).toISOString(),
+      ergebnis: l.rating, richtig: l.rating >= 2, art, frei: FREIE_TYPEN.has(art), geraet: l.geraet || this.geraet(),
+    };
+  },
+
+  /** Alle Karten mit Ordner, Buch und Kapitel – damit das Dashboard auch nie gelernte Karten kennt */
+  katalog() {
+    return Array.from(State.cards.values()).map((c) => {
+      const pfad = Store.folderPath(c.folderId);
+      const o = Store.origin(c.folderId);
+      let frage = '';
+      try { frage = String(CardTypes[c.type].summary(c.data)[0] || '').slice(0, 160); } catch (e) { /* Bildkarte o. Ä. */ }
+      return {
+        id: c.sid || this.sidFor(c), ordner: pfad.map((f) => f.name).join('/'), buch: pfad[0]?.name || '', buchTitel: o?.book || '',
+        kapitel: pfad.slice(0, 2).map((f) => f.name).join('/'), typ: c.type, art: c.type === 'basic' ? (c.data.kind || '') : '', frage,
+      };
+    });
+  },
+  pruefungen() {
+    return Array.from(State.folders.values()).filter((f) => f.examDate)
+      .map((f) => ({ ordner: Store.folderPathString(f.id), buch: Store.folderPath(f.id)[0]?.name || f.name, datum: f.examDate }));
+  },
+
+  /** Exportdatei: nur die Wiederholungen dieses Geräts */
+  async datei() {
+    const ich = this.geraet();
+    const logs = (await DB.getAll('logs')).filter((l) => !l.geraet || l.geraet === ich).sort((a, b) => a.ts - b.ts);
+    return {
+      format: VERLAUF_FORMAT, version: 1, app: APP_VERSION, geraet: ich, exportiert: new Date().toISOString(),
+      karten: this.katalog(), pruefungen: this.pruefungen(), eintraege: logs.map((l) => this.eintrag(l)),
+    };
+  },
+
+  async exportieren() {
+    const d = await this.datei();
+    const name = `verlauf-${d.geraet}`;
+    const text = JSON.stringify(d);
+    State.settings.verlaufExport = Date.now();
+    await Store.saveSettings();
+    try {
+      if (isTouch() && navigator.canShare) {
+        // Android teilt .json oft nicht – dann derselbe Inhalt als .txt (das Dashboard liest beides)
+        let file = new File([text], `${name}.json`, { type: 'application/json' });
+        if (!navigator.canShare({ files: [file] })) file = new File([text], `${name}.txt`, { type: 'text/plain' });
+        if (navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: file.name }); toast(`${plural(d.eintraege.length, 'Wiederholung', 'Wiederholungen')} geteilt.`, 'ok'); return; }
+      }
+    } catch (e) { if (e.name === 'AbortError') return; }
+    downloadText(`${name}.json`, text);
+    toast(`Gespeichert als ${name}.json – ${plural(d.eintraege.length, 'Wiederholung', 'Wiederholungen')}.`, 'ok');
+  },
+
+  /** Liest einen Lernverlauf ein. Vorhandene Einträge (gleiche ID) werden übersprungen. */
+  async einlesen(json, { leise = false } = {}) {
+    if (!json || json.format !== VERLAUF_FORMAT || !Array.isArray(json.eintraege)) throw new Error('Das ist keine Lernverlauf-Datei (format „merkwerk-lernverlauf“).');
+    if (Number(json.version) > 1) throw new Error('Diese Lernverlauf-Datei stammt aus einer neueren Version. Bitte Merkwerk aktualisieren.');
+    const vorhanden = new Set((await DB.getAll('logs')).map((l) => l.id));
+    const proSid = new Map();
+    for (const c of State.cards.values()) proSid.set(c.sid, c);
+    const neu = [];
+    let doppelt = 0, fehlerhaft = 0;
+    for (const e of json.eintraege) {
+      const ts = Date.parse(e?.zeit);
+      if (!e || !e.id || !e.karte || Number.isNaN(ts) || ![1, 2, 3, 4].includes(e.ergebnis)) { fehlerhaft++; continue; }
+      if (vorhanden.has(e.id)) { doppelt++; continue; }
+      vorhanden.add(e.id);
+      const c = proSid.get(e.karte);
+      neu.push({ id: String(e.id), cardId: c ? c.id : null, sid: String(e.karte), ts, rating: e.ergebnis, ms: 0, type: e.art || 'basic', state: 'import', folderId: c ? c.folderId : null, geraet: e.geraet || json.geraet || 'anderes' });
+    }
+    await DB.putMany('logs', neu);
+    const karten = await this.nachrechnen(new Set(neu.map((l) => l.sid)));
+    if (!leise) Bus.emit('data');
+    return { neu: neu.length, doppelt, fehlerhaft, karten };
+  },
+
+  /** Lernstand (FSRS) aus allen Wiederholungen einer Karte neu berechnen */
+  async nachrechnen(sids) {
+    if (!sids.size) return 0;
+    const proSid = new Map();
+    for (const l of await DB.getAll('logs')) if (sids.has(l.sid)) (proSid.get(l.sid) || proSid.set(l.sid, []).get(l.sid)).push(l);
+    const geaendert = [];
+    for (const c of State.cards.values()) {
+      const liste = proSid.get(c.sid);
+      if (!liste) continue;
+      liste.sort((a, b) => a.ts - b.ts);
+      let srs = FSRS.newState();
+      for (const l of liste) srs = FSRS.review(srs, l.rating, l.ts, State.settings.retention, true);
+      c.srs = srs;
+      geaendert.push(c);
+    }
+    await DB.putMany('cards', geaendert);
+    return geaendert.length;
+  },
+
+  /** Nach einem Import: Hat eine neu angelegte Karte schon einen Verlauf (z. B. Stapel gelöscht und neu importiert),
+   *  bekommt sie ihren Lernstand zurück. */
+  async nachImport() {
+    const neu = new Set(Array.from(State.cards.values()).filter((c) => c.srs.state === 'new').map((c) => c.sid));
+    if (!neu.size) return 0;
+    const mitVerlauf = new Set((await DB.getAll('logs')).filter((l) => neu.has(l.sid)).map((l) => l.sid));
+    return this.nachrechnen(mitVerlauf);
+  },
+};
+
+/* ---------- Dashboard-Modus ---------- */
+const Dashboard = {
+  aktiv: DASHBOARD_MODUS,
+  wechsel: false,
+  senden(nachricht) {
+    if (this.aktiv && window.parent !== window) window.parent.postMessage({ von: 'merkwerk', ...nachricht }, location.origin);
+  },
+  starten() {
+    if (!this.aktiv) return;
+    document.documentElement.classList.add('im-dashboard');
+    window.addEventListener('message', (ev) => this.empfangen(ev));
+    this.senden({ typ: 'gestartet', version: APP_VERSION });
+  },
+  async empfangen(ev) {
+    if (ev.origin !== location.origin || ev.source !== window.parent) return;
+    const m = ev.data || {};
+    if (m.an !== 'merkwerk') return;
+    try {
+      if (m.typ === 'laden') {
+        if (Study.active) Study.exit();
+        await Store.wipeAll();
+        Object.assign(State.settings, { onboarded: true, theme: 'clean', sound: false, geraet: m.geraet || 'pc', ...(m.einstellungen || {}) });
+        applyTheme();
+        let karten = 0;
+        for (const stapel of m.stapel || []) karten += (await IO.importDeck(stapel, null)).created;
+        // Prüfungstermine aus dem Dashboard (Kalender) gelten auch hier
+        for (const p of m.pruefungen || []) {
+          const f = Store.childFolders(null).find((x) => x.name === p.buch);
+          if (f) await Store.updateFolder(f.id, { examDate: p.datum });
+        }
+        const v = await this.einlesenLeise(m.eintraege || []);
+        Bus.emit('data');
+        route();
+        this.senden({ typ: 'bereit', karten, katalog: Verlauf.katalog(), uebernommen: v.neu });
+      } else if (m.typ === 'lernen') {
+        let folderId = null;
+        // Pfade kommen mit „/“ (wie im Stapel), Merkwerk zeigt sie mit „ / “ an
+        if (m.ordner) folderId = Array.from(State.folders.values()).find((f) => Store.folderPath(f.id).map((x) => x.name).join('/') === m.ordner)?.id || null;
+        if (m.ordner && !folderId) { this.senden({ typ: 'fertig', grund: 'nichts-faellig' }); return; }
+        const ids = Array.isArray(m.karten) ? Array.from(State.cards.values()).filter((c) => m.karten.includes(c.sid)).map((c) => c.id) : null;
+        // Eine laufende Runde still beenden – sonst meldet sie „fertig“, obwohl gleich die nächste beginnt
+        this.wechsel = true;
+        try { startStudy({ folderId, mode: m.modus || 'learn', cardIds: ids, label: m.titel || null }); } finally { this.wechsel = false; }
+        if (!Study.active) this.senden({ typ: 'fertig', grund: 'nichts-faellig' });
+      } else if (m.typ === 'beenden') {
+        if (Study.active) Study.exit();
+      }
+    } catch (e) {
+      console.error(e);
+      this.senden({ typ: 'fehler', text: e.message });
+    }
+  },
+  async einlesenLeise(eintraege) {
+    return Verlauf.einlesen({ format: VERLAUF_FORMAT, version: 1, eintraege }, { leise: true });
+  },
+};
+
 /* ---- 99-main.js ---- */
 /* App-Gerüst: Navigation, Router, Start */
 const NAV = [
@@ -7070,9 +7312,10 @@ async function init() {
   route();
   // Erfolge rückwirkend prüfen (z. B. neue Erfolge nach einem Update)
   setTimeout(() => Badges.evaluate(), 600);
-  if (!State.persistent) toast('Dein Browser blockiert den dauerhaften Speicher. Exportiere regelmäßig eine Sicherung.', 'warn', { duration: 9000 });
-  showWelcome();
-  if ((location.protocol === 'https:' || location.protocol === 'http:') && 'serviceWorker' in navigator) {
+  Dashboard.starten();
+  if (!State.persistent && !DASHBOARD_MODUS) toast('Dein Browser blockiert den dauerhaften Speicher. Exportiere regelmäßig eine Sicherung.', 'warn', { duration: 9000 });
+  if (!DASHBOARD_MODUS) showWelcome();
+  if (!DASHBOARD_MODUS && (location.protocol === 'https:' || location.protocol === 'http:') && 'serviceWorker' in navigator) {
     const hadController = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.register('sw.js').then((reg) => {
       reg.addEventListener('updatefound', () => {
@@ -7083,7 +7326,7 @@ async function init() {
       });
     }).catch(() => { /* Offline-Modus nicht verfügbar, App funktioniert trotzdem */ });
   }
-  window.Merkwerk = { State, Store, IO, FSRS, Study, CardTypes, DB, RPG, NumDistractors, presentAs, kindOf, dirOf, pairPartner, guessDir, version: APP_VERSION };
+  window.Merkwerk = { State, Store, IO, FSRS, Study, CardTypes, DB, RPG, NumDistractors, presentAs, kindOf, dirOf, pairPartner, guessDir, Verlauf, Dashboard, version: APP_VERSION };
 }
 
 init().catch((e) => {
